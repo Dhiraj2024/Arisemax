@@ -1,0 +1,487 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    display: flex; 
+    min-height: 100vh;
+}
+/*/////////////////////////////////////////////////////
+//////////////////////////////////////////////////////
+////CONTENTS//////////////////////
+/* 1. Sidebar Container Styling */
+/* --- Sidebar Base --- */
+/* ===== Sidebar Base ===== */
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 260px;
+  background-color: #1e1e1e;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 1rem 0;
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+}
+
+/* ===== Header ===== */
+.sidebar-header {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.sidebar-logo {
+  width: 60px;
+  border-radius: 50%;
+}
+
+.sidebar-title {
+  margin-top: 0.5rem;
+  font-family: "Poppins", sans-serif;
+  font-size: 1.2rem;
+  color: #ffd700;
+}
+
+/* ===== Links ===== */
+.sidebar-links {
+  flex-grow: 1;
+}
+
+.sidebar-item {
+  display: block;
+  padding: 12px 25px;
+  color: #f0f0f0;
+  text-decoration: none;
+  font-weight: 500;
+  transition: background 0.3s, color 0.3s;
+}
+
+.sidebar-item:hover {
+  background: #333;
+  color: #ffd700;
+}
+
+/* ===== Social Links ===== */
+.social-icons {
+  text-align: center;
+  padding: 10px 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.icon-link {
+  margin: 0 8px;
+  color: #ccc;
+  text-decoration: none;
+  font-size: 0.9rem;
+}
+
+.icon-link:hover {
+  color: #ffd700;
+}
+
+/* ===== Hamburger (Mobile only) ===== */
+.hamburger {
+  display: none;
+  position: fixed;
+  top: 15px;
+  left: 15px;
+  background: #1e1e1e;
+  color: white;
+  border-radius: 4px;
+  padding: 8px 10px;
+  font-size: 22px;
+  cursor: pointer;
+  z-index: 1100;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 768px) {
+  .sidebar {
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+    width: 220px;
+  }
+
+  .sidebar.active {
+    transform: translateX(0);
+  }
+
+  .hamburger {
+    display: block;
+  }
+}
+
+/* ===== Content (Optional hint — no override!) ===== */
+.content {
+  padding: 1.5rem;
+  /* No margin-left needed — sidebar floats above content */
+}
+
+
+/*/////////////////////////////////////////////////////
+//////////////////////////////////////////////////////
+////CONTENTS//////////////////////
+/* Optional: Styling for the Main Content Area */
+  .content {
+      width: 70%;
+      margin: 4px auto;
+      background-color: #f9fafb;
+      border-radius: 15px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      display: flex;
+      flex-wrap: wrap;
+      overflow: hidden;
+    }
+
+    .container-text {
+      flex: 1 1 50%;
+      padding: 40px 30px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .container-text h4 {
+      font-weight: 600;
+      margin-bottom: 15px;
+      color: #333;
+    }
+
+    .container-text p {
+      font-size: 1.1rem;
+      color: #555;
+      margin-bottom: 20px;
+    }
+
+    .primary-btn {
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 30px;
+      transition: 0.3s;
+    }
+
+    .primary-btn:hover {
+      background-color: #0056b3;
+    }
+
+    .image-section {
+      flex: 1 1 50%;
+      position: relative;
+    }
+
+    .image-section img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .upload-btn {
+      position: absolute;
+      bottom: 15px;
+      right: 15px;
+      background-color: rgba(255, 255, 255, 0.9);
+      color: #333;
+      border: 1px solid #ccc;
+      padding: 8px 15px;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      transition: 0.3s;
+    }
+
+    .upload-btn:hover {
+      background-color: #007bff;
+      color: #fff;
+      border-color: #007bff;
+    }
+
+    @media (max-width: 768px) {
+      .content {
+        width: 90%;
+      }
+      .container-text, .image-section {
+        flex: 1 1 100%;
+      }
+      .container-text {
+        text-align: center;
+      }
+      .upload-btn {
+        bottom: 10px;
+        right: 50%;
+        transform: translateX(50%);
+      }
+    }
+/*///////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////*/
+/* INDEX SECTION */
+.mortgage-content {
+  width: 70%;
+  margin: 40px auto;
+  background-color: #f9fafb;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  padding: 30px;
+}
+
+.mortgage-content h2 {
+  color: #1a1a1a;
+  font-weight: 700;
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+/* Card Container */
+.mort-card-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Card Styling */
+.mort-list-card {
+  border: none;
+  border-radius: 16px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+  width: 100%;
+  background-color: #fff;
+}
+
+.mort-list-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+}
+
+.mort-list-card .card-body {
+  background-color: #ffffff;
+  border-radius: 16px;
+  padding: 25px;
+}
+
+/* Text Styling */
+.mort-list-card .card-title {
+  color: #2c3e50;
+  font-weight: 600;
+  font-size: 1.25rem;
+  margin-bottom: 8px;
+}
+
+.mort-list-card .card-text {
+  font-size: 0.95rem;
+  color: #555;
+}
+
+/* Buttons */
+.mort-btn-edit, .mort-btn-delete {
+  border: none;
+  background: none;
+  font-size: 1.25rem;
+  transition: 0.3s ease;
+  cursor: pointer;
+}
+
+.mort-btn-edit:hover {
+  color: #007bff;
+  transform: scale(1.2);
+}
+
+.mort-btn-delete:hover {
+  color: #dc3545;
+  transform: scale(1.2);
+}
+
+/* Add New Card */
+.mort-add-card {
+  border: 2px dashed #a5b4fc;
+  background-color: #f8faff;
+  border-radius: 16px;
+  transition: 0.3s ease;
+  padding: 14px;
+  text-align: center;
+}
+
+.mort-add-card:hover {
+  background-color: #eef2ff;
+  border-color: #6366f1;
+}
+
+.mort-add-card a {
+  color: #4f46e5 !important;
+  font-weight: 600;
+  text-decoration: none;
+  font-size: 1rem;
+}
+
+/* EDIT PAGE */
+.edit-goal-content {
+  width: 70%;
+  margin: 60px auto;
+  background-color: #f9fafb;
+  border-radius: 16px;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.08);
+  padding: 50px 40px;
+}
+
+/* Form Card */
+.form-card {
+  border: none;
+  border-radius: 16px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+  padding: 40px;
+  background: #fff;
+}
+
+.form-card h3 {
+  color: #1a1a1a;
+  text-align: center;
+  font-weight: 700;
+  margin-bottom: 30px;
+}
+
+/* Inputs */
+.form-control {
+  border-radius: 10px;
+  padding: 12px 15px;
+  border: 1px solid #d0d7de;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.form-control:focus {
+  border-color: #6366f1;
+  box-shadow: 0 0 0 0.2rem rgba(99, 102, 241, 0.2);
+}
+
+label.form-label {
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+/* Buttons */
+.btn-save, .btn-add-goal {
+  background-color: #f97316 !important;
+  border: none;
+  color: #fff;
+  border-radius: 30px;
+  padding: 10px 25px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  display: block;
+  margin: 0 auto;
+}
+
+.btn-save:hover,
+.btn-add-goal:hover {
+  background-color: #ea580c !important;
+  transform: translateY(-2px);
+}
+
+/* CREATE PAGE */
+.create-goal-content {
+  width: 70%;
+  margin: 60px auto;
+  background-color: #f9fafb;
+  border-radius: 16px;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.08);
+  padding: 50px 40px;
+  overflow: hidden;
+}
+
+/* Responsive Design */
+@media (max-width: 992px) {
+  .mortgage-content,
+  .edit-goal-content,
+  .create-goal-content {
+    width: 85%;
+    padding: 30px 25px;
+  }
+
+  .mort-card-wrapper {
+    gap: 15px;
+  }
+
+  .mort-list-card .card-body {
+    padding: 20px;
+  }
+}
+
+@media (max-width: 576px) {
+  .mortgage-content,
+  .edit-goal-content,
+  .create-goal-content {
+    width: 95%;
+    padding: 20px;
+  }
+
+  .mort-list-card {
+    border-radius: 12px;
+  }
+
+  .form-card {
+    padding: 25px 20px;
+  }
+
+  .form-control {
+    font-size: 0.95rem;
+  }
+
+  .mort-list-card .card-title {
+    font-size: 1.1rem;
+  }
+}
+
+  
+    /*//////////////////////////////////////////////////////////////
+    /////////////////
+    /////////////////-------------IDOLLL---------------
+    ////////////////////////////////////////////////////////////////*/
+
+/* Container for all cards */
+.idol-cards {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+/* Individual card styling */
+.idol-card {
+  width: 300px;
+  border-radius: 12px;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.idol-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15);
+}
+
+/* Image styling */
+.idol-card img {
+  height: 200px;
+  object-fit: cover;
+}
+
+/* Add card styling */
+.add-card {
+  border: 2px dashed #ccc;
+  background: #f9f9f9;
+  transition: background 0.3s ease;
+}
+
+.add-card:hover {
+  background: #e9ecef;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .content {
+    width: 90%;
+  }
+  .idol-card {
+    width: 100%;
+  }
+}

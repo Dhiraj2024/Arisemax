@@ -1,0 +1,37 @@
+<%- layout("layout/boilerplate")  %>
+
+<div class="content">
+<div class="mortgage-content">
+      <h2>My Mortgage Listings</h2>
+      <% for(let mort of allMort) { %>
+        
+      <div class="mort-list-card card mb-3">
+        <div class="card-body d-flex justify-content-between align-items-center ">
+          <div>
+            <h5 class="card-title mb-1"><%= mort.title %></h5>
+            <p class="card-text text-muted mb-0"><%= mort.description %></p>
+          </div>
+
+          <div class="d-flex ms-3 flex-shrink-0">
+            <a href="/mort/<%= mort._id %>/edit" class="mort-btn-edit text-secondary me-3" title="Edit Entry">
+              ✏️
+            </a>
+            <form method="POST" action="/mort/<%= mort._id %>?_method=DELETE" style="display:inline;">
+              <button class="mort-btn-delete text-danger" title="Delete Entry" onclick="return confirm('Are you sure you want to delete this?')">
+                🗑️
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+      <% } %>
+
+      <div class="mort-add-card card mt-2">
+        <div class="card-body p-1 text-center">
+          <a href="/mort/new" class="d-inline-flex align-items-center">
+            <span class="me-2" style="font-size: 1.25rem;">➕</span> Add New Goal
+          </a>
+        </div>
+      </div>
+  </div>
+</div>

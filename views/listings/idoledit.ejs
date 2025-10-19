@@ -1,0 +1,50 @@
+<%- layout("layout/boilerplate") %>
+
+<div class="content">
+  <main class="edit-goal-content">
+    <div class="card form-card bg-white mx-auto">
+      <h3>Edit Your Idol</h3>
+
+      <form method="POST" action="/idol/<%= idol._id %>?_method=PUT" novalidate class="needs-validation">
+
+        <div class="mb-3">
+          <label for="idolTitle" class="form-label">Title</label>
+          <input
+            id="idolTitle"
+            name="idol[title]"
+            value="<%= idol.title %>"
+            type="text"
+            class="form-control"
+            required
+          />
+          <div class="invalid-feedback">Please enter a title.</div>
+        </div>
+
+        <div class="mb-3">
+          <label for="idolDescription" class="form-label">Description</label>
+          <textarea
+            id="idolDescription"
+            name="idol[description]"
+            class="form-control"
+            rows="5"
+            required
+          ><%= idol.description %></textarea>
+          <div class="invalid-feedback">Please enter a description.</div>
+        </div>
+
+        <div class="mb-3">
+          <label for="idolImage" class="form-label">Image URL</label>
+          <input
+            id="idolImage"
+            name="idol[image]"
+            value="<%= idol.image %>"
+            type="text"
+            class="form-control"
+          />
+        </div>
+
+        <button class="btn btn-save mt-3">Save Changes</button>
+      </form>
+    </div>
+  </main>
+</div>

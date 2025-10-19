@@ -1,0 +1,41 @@
+<%- layout("layout/boilerplate")  %>
+<div class="content">
+  <div class="create-goal-content">
+    <main class="container-fluid px-0">
+      <div class="card form-card bg-white mx-auto">
+        <h3>Create a New Goal</h3>
+        <form method="POST" action="/know" novalidate class="needs-validation">
+          
+          <div class="mb-3">
+            <label for="knowTitle" class="form-label">Title</label>
+            <input
+              id="knowTitle"
+              name="know[title]"
+              placeholder="Enter title"
+              type="text"
+              class="form-control"
+              required
+            />
+            <div class="valid-feedback">Title looks good!</div>
+            <div class="invalid-feedback">Please enter a title.</div>
+          </div>
+
+          <div class="mb-3">
+            <label for="knowDescription" class="form-label">Description</label>
+            <textarea
+              id="knowDescription"
+              name="know[description]"
+              placeholder="Enter description"
+              class="form-control"
+              rows="5"
+              required
+            ></textarea>
+            <div class="invalid-feedback">Please enter a description.</div>
+          </div>
+
+          <button class="btn btn-add-goal mt-3">Add Goal</button>
+        </form>
+      </div>
+    </main>
+  </div>
+  </div>

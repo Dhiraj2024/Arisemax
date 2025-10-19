@@ -1,0 +1,66 @@
+<%- layout("layout/boilerplate") %>
+
+<div class="content">
+  <div class="create-goal-content">
+    <main class="container-fluid px-0">
+      <div class="card form-card bg-white mx-auto">
+        <h3>Add a New Career Field</h3>
+
+        <form method="POST" action="/expo" novalidate class="needs-validation">
+
+          <div class="mb-3">
+            <label for="expoTitle" class="form-label">Career Name</label>
+            <input
+              id="expoTitle"
+              name="expo[title]"
+              placeholder="Enter career name"
+              type="text"
+              class="form-control"
+              required
+            />
+            <div class="invalid-feedback">Please fill out the career name!</div>
+          </div>
+
+          <div class="mb-3">
+            <label for="expoEligibility" class="form-label">Eligibility (Course Name)</label>
+            <input
+              id="expoEligibility"
+              name="expo[eligibility]"
+              placeholder="Enter eligibility or course name"
+              type="text"
+              class="form-control"
+              required
+            />
+            <div class="invalid-feedback">Please fill out eligibility or course name.</div>
+          </div>
+
+          <div class="mb-3">
+            <label for="expoDetails" class="form-label">Details (Video Link)</label>
+            <input
+              id="expoDetails"
+              name="expo[details]"
+              placeholder="Enter details or video link"
+              type="text"
+              class="form-control"
+              required
+            />
+            <div class="invalid-feedback">Please enter video link or details.</div>
+          </div>
+
+          <div class="mb-3">
+            <label for="expoImage" class="form-label">Image URL</label>
+            <input
+              id="expoImage"
+              name="expo[image]"
+              placeholder="Enter image link"
+              type="text"
+              class="form-control"
+            />
+          </div>
+
+          <button class="btn btn-add-goal mt-3">Save & Add</button>
+        </form>
+      </div>
+    </main>
+  </div>
+</div>

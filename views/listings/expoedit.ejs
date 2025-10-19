@@ -1,0 +1,64 @@
+<%- layout("layout/boilerplate") %>
+
+<div class="content">
+  <main class="edit-goal-content">
+    <div class="card form-card bg-white mx-auto">
+      <h3>Edit Career Field</h3>
+
+      <form method="POST" action="/expo/<%= expo._id %>?_method=PUT" novalidate class="needs-validation">
+
+        <div class="mb-3">
+          <label for="expoTitle" class="form-label">Career Name</label>
+          <input
+            id="expoTitle"
+            name="expo[title]"
+            value="<%= expo.title %>"
+            type="text"
+            class="form-control"
+            required
+          />
+          <div class="invalid-feedback">Please enter the career name.</div>
+        </div>
+
+        <div class="mb-3">
+          <label for="expoEligibility" class="form-label">Eligibility (Course Name)</label>
+          <input
+            id="expoEligibility"
+            name="expo[eligibility]"
+            value="<%= expo.eligibility %>"
+            type="text"
+            class="form-control"
+            required
+          />
+          <div class="invalid-feedback">Please enter the eligibility/course name.</div>
+        </div>
+
+        <div class="mb-3">
+          <label for="expoDetails" class="form-label">Details (Video Link)</label>
+          <input
+            id="expoDetails"
+            name="expo[details]"
+            value="<%= expo.details %>"
+            type="text"
+            class="form-control"
+            required
+          />
+          <div class="invalid-feedback">Please enter the video link or details.</div>
+        </div>
+
+        <div class="mb-3">
+          <label for="expoImage" class="form-label">Image URL</label>
+          <input
+            id="expoImage"
+            name="expo[image]"
+            value="<%= expo.image.url %>"
+            type="text"
+            class="form-control"
+          />
+        </div>
+
+        <button class="btn btn-save mt-3">Save Changes</button>
+      </form>
+    </div>
+  </main>
+</div>

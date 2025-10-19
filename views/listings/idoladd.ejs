@@ -1,0 +1,53 @@
+<%- layout("layout/boilerplate") %>
+
+<div class="content">
+  <div class="create-goal-content">
+    <main class="container-fluid px-0">
+      <div class="card form-card bg-white mx-auto">
+        <h3>Create a New Inspiration</h3>
+
+        <form method="POST" action="/idol" novalidate class="needs-validation">
+
+          <div class="mb-3">
+            <label for="idolTitle" class="form-label">Title</label>
+            <input
+              id="idolTitle"
+              name="idol[title]"
+              placeholder="Enter title"
+              type="text"
+              class="form-control"
+              required
+            />
+            <div class="invalid-feedback">Please fill out the title!</div>
+          </div>
+
+          <div class="mb-3">
+            <label for="idolDescription" class="form-label">Description</label>
+            <textarea
+              id="idolDescription"
+              name="idol[description]"
+              placeholder="Enter description"
+              class="form-control"
+              rows="5"
+              required
+            ></textarea>
+            <div class="invalid-feedback">Please enter a description.</div>
+          </div>
+
+          <div class="mb-3">
+            <label for="idolImage" class="form-label">Image URL</label>
+            <input
+              id="idolImage"
+              name="idol[image]"
+              placeholder="Enter image link"
+              type="text"
+              class="form-control"
+            />
+          </div>
+
+          <button class="btn btn-add-goal mt-3">Save & Add</button>
+        </form>
+      </div>
+    </main>
+  </div>
+</div>

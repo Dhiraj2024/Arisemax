@@ -1,0 +1,25 @@
+<%- layout("layout/boilerplate")  %>
+
+<div class="content">
+ <main class="edit-goal-content">
+    <div class="card form-card bg-white mx-auto">
+      <h3>Edit Your Goal</h3>
+      <form method="POST" action="/daily/<%= daily._id %>?_method=PUT" novalidate class="needs-validation">
+        
+        <div class="mb-3">
+          <label for="dailyTitle" class="form-label">Title</label>
+          <input id="dailyTitle" name="daily[title]" value="<%= daily.title %>" type="text" class="form-control" required />
+          <div class="invalid-feedback">Please enter a title.</div>
+        </div>
+
+        <div class="mb-3">
+          <label for="editDescription" class="form-label">Description</label>
+          <textarea id="editDescription" name="daily[description]" class="form-control" rows="5" required><%= daily.description %></textarea>
+          <div class="invalid-feedback">Please enter a description.</div>
+        </div>
+
+        <button class="btn btn-save mt-3">Save Changes</button>
+      </form>
+    </div>
+  </main>
+  </div>
