@@ -1,33 +1,49 @@
-body {
-    margin: 0;
-    padding: 0;
-    font-family: Arial, sans-serif;
-    display: flex; 
-    min-height: 100vh;
+/*////////////////////////////////////////////////////////////////
+//////////////////////// GLOBAL STYLES ///////////////////////////
+////////////////////////////////////////////////////////////////*/
+
+:root {
+  --primary: #007bff;
+  --primary-dark: #0056b3;
+  --accent: #ffd700;
+  --bg-dark: #1e1e1e;
+  --bg-light: #f9fafb;
+  --text-dark: #2c3e50;
+  --text-light: #f0f0f0;
+  --shadow: rgba(0, 0, 0, 0.15);
+  --radius: 16px;
 }
-/*/////////////////////////////////////////////////////
-//////////////////////////////////////////////////////
-////CONTENTS//////////////////////
-/* 1. Sidebar Container Styling */
-/* --- Sidebar Base --- */
-/* ===== Sidebar Base ===== */
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: "Poppins", Arial, sans-serif;
+  display: flex;
+  min-height: 100vh;
+  color: var(--text-dark);
+  overflow-x: hidden;
+}
+
+/*////////////////////////////////////////////////////////////////
+//////////////////////// SIDEBAR STYLING /////////////////////////
+////////////////////////////////////////////////////////////////*/
+
 .sidebar {
   position: fixed;
   top: 0;
   left: 0;
   height: 100vh;
   width: 260px;
-  background-color: #1e1e1e;
+  background-color: var(--bg-dark);
   color: #fff;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   padding: 1rem 0;
-  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.2);
+  box-shadow: 2px 0 8px var(--shadow);
   z-index: 1000;
 }
 
-/* ===== Header ===== */
 .sidebar-header {
   text-align: center;
   margin-bottom: 1rem;
@@ -40,12 +56,11 @@ body {
 
 .sidebar-title {
   margin-top: 0.5rem;
-  font-family: "Poppins", sans-serif;
   font-size: 1.2rem;
-  color: #ffd700;
+  font-weight: 600;
+  color: var(--accent);
 }
 
-/* ===== Links ===== */
 .sidebar-links {
   flex-grow: 1;
 }
@@ -61,7 +76,7 @@ body {
 
 .sidebar-item:hover {
   background: #333;
-  color: #ffd700;
+  color: var(--accent);
 }
 
 /* ===== Social Links ===== */
@@ -76,10 +91,11 @@ body {
   color: #ccc;
   text-decoration: none;
   font-size: 0.9rem;
+  transition: 0.3s;
 }
 
 .icon-link:hover {
-  color: #ffd700;
+  color: var(--accent);
 }
 
 /* ===== Hamburger (Mobile only) ===== */
@@ -88,7 +104,7 @@ body {
   position: fixed;
   top: 15px;
   left: 15px;
-  background: #1e1e1e;
+  background: var(--bg-dark);
   color: white;
   border-radius: 4px;
   padding: 8px 10px;
@@ -97,7 +113,7 @@ body {
   z-index: 1100;
 }
 
-/* ===== Responsive ===== */
+/* ===== Responsive Sidebar ===== */
 @media (max-width: 768px) {
   .sidebar {
     transform: translateX(-100%);
@@ -107,6 +123,8 @@ body {
 
   .sidebar.active {
     transform: translateX(0);
+    box-shadow: 4px 0 15px rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(6px);
   }
 
   .hamburger {
@@ -114,169 +132,155 @@ body {
   }
 }
 
-/* ===== Content (Optional hint — no override!) ===== */
+/*////////////////////////////////////////////////////////////////
+//////////////////////// CONTENT SECTION /////////////////////////
+////////////////////////////////////////////////////////////////*/
+
 .content {
-  padding: 1.5rem;
-  /* No margin-left needed — sidebar floats above content */
+  width: min(90%, 1100px);
+  background-color: rgba(193, 193, 170, 0.14);
+  border-radius: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  align-items: center;
+  justify-content: center;
+}
+
+.container-text {
+  flex: 1 1 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.container-text h4 {
+  font-weight: 600;
+  margin-bottom: 15px;
+  color: var(--text-dark);
+  font-size: 1.6rem;
+}
+
+.container-text p {
+  font-size: 1.1rem;
+  color: #555;
+  margin-bottom: 25px;
+  line-height: 1.6;
+}
+
+.primary-btn {
+  background: linear-gradient(45deg, var(--primary), #00bfff);
+  color: #fff;
+  border: none;
+  padding: 12px 26px;
+  border-radius: 30px;
+  font-weight: 600;
+  transition: transform 0.2s, box-shadow 0.2s;
+  width: fit-content;
+}
+
+.primary-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 5px 15px rgba(0, 123, 255, 0.3);
+}
+
+.image-section {
+  flex: 1 1 50%;
+  position: relative;
+  overflow: hidden;
+  border-radius: 20px;
+}
+
+.image-section img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.4s ease;
+}
+
+.image-section img:hover {
+  transform: scale(1.05);
+}
+
+.image-section::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.4), transparent);
+}
+
+/* Responsive content */
+@media (max-width: 768px) {
+  .content {
+    width: 95%;
+    flex-direction: column;
+  }
+  .container-text {
+    text-align: center;
+
+  }
+  .image-section {
+    order: -1;
+  }
+  .image-section img {
+    height: 250px;
+  }
 }
 
 
-/*/////////////////////////////////////////////////////
-//////////////////////////////////////////////////////
-////CONTENTS//////////////////////
-/* Optional: Styling for the Main Content Area */
-  .content {
-      width: 70%;
-      margin: 4px auto;
-      background-color: #f9fafb;
-      border-radius: 15px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-      display: flex;
-      flex-wrap: wrap;
-      overflow: hidden;
-    }
+/*////////////////////////////////////////////////////////////////
+//////////////////////// MORTGAGE SECTION ////////////////////////
+////////////////////////////////////////////////////////////////*/
 
-    .container-text {
-      flex: 1 1 50%;
-      padding: 40px 30px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-    }
-
-    .container-text h4 {
-      font-weight: 600;
-      margin-bottom: 15px;
-      color: #333;
-    }
-
-    .container-text p {
-      font-size: 1.1rem;
-      color: #555;
-      margin-bottom: 20px;
-    }
-
-    .primary-btn {
-      background-color: #007bff;
-      color: #fff;
-      border: none;
-      padding: 10px 20px;
-      border-radius: 30px;
-      transition: 0.3s;
-    }
-
-    .primary-btn:hover {
-      background-color: #0056b3;
-    }
-
-    .image-section {
-      flex: 1 1 50%;
-      position: relative;
-    }
-
-    .image-section img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    .upload-btn {
-      position: absolute;
-      bottom: 15px;
-      right: 15px;
-      background-color: rgba(255, 255, 255, 0.9);
-      color: #333;
-      border: 1px solid #ccc;
-      padding: 8px 15px;
-      border-radius: 20px;
-      font-size: 0.9rem;
-      transition: 0.3s;
-    }
-
-    .upload-btn:hover {
-      background-color: #007bff;
-      color: #fff;
-      border-color: #007bff;
-    }
-
-    @media (max-width: 768px) {
-      .content {
-        width: 90%;
-      }
-      .container-text, .image-section {
-        flex: 1 1 100%;
-      }
-      .container-text {
-        text-align: center;
-      }
-      .upload-btn {
-        bottom: 10px;
-        right: 50%;
-        transform: translateX(50%);
-      }
-    }
-/*///////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////*/
-/* INDEX SECTION */
 .mortgage-content {
-  width: 70%;
-  margin: 40px auto;
-  background-color: #f9fafb;
-  border-radius: 16px;
+  width: min(90%, 1100px);
+  background-color: var(--bg-light);
+  border-radius: var(--radius);
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-  padding: 30px;
+
 }
 
 .mortgage-content h2 {
-  color: #1a1a1a;
+  color: var(--text-dark);
   font-weight: 700;
   margin-bottom: 30px;
   text-align: center;
 }
 
-/* Card Container */
 .mort-card-wrapper {
   display: flex;
   flex-direction: column;
   gap: 20px;
 }
 
-/* Card Styling */
 .mort-list-card {
   border: none;
-  border-radius: 16px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-  transition: all 0.3s ease;
-  width: 100%;
+  border-radius: var(--radius);
   background-color: #fff;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  transition: all 0.25s ease-in-out;
 }
 
 .mort-list-card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+  transform: translateY(-6px) scale(1.01);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
 }
 
 .mort-list-card .card-body {
-  background-color: #ffffff;
-  border-radius: 16px;
-  padding: 25px;
+  background-color: #fff;
+  border-radius: var(--radius);
 }
 
-/* Text Styling */
 .mort-list-card .card-title {
-  color: #2c3e50;
+  color: var(--text-dark);
   font-weight: 600;
   font-size: 1.25rem;
   margin-bottom: 8px;
 }
 
-.mort-list-card .card-text {
-  font-size: 0.95rem;
-  color: #555;
-}
-
-/* Buttons */
-.mort-btn-edit, .mort-btn-delete {
+.mort-btn-edit,
+.mort-btn-delete {
   border: none;
   background: none;
   font-size: 1.25rem;
@@ -285,7 +289,7 @@ body {
 }
 
 .mort-btn-edit:hover {
-  color: #007bff;
+  color: var(--primary);
   transform: scale(1.2);
 }
 
@@ -294,11 +298,10 @@ body {
   transform: scale(1.2);
 }
 
-/* Add New Card */
 .mort-add-card {
   border: 2px dashed #a5b4fc;
   background-color: #f8faff;
-  border-radius: 16px;
+  border-radius: var(--radius);
   transition: 0.3s ease;
   padding: 14px;
   text-align: center;
@@ -316,33 +319,35 @@ body {
   font-size: 1rem;
 }
 
-/* EDIT PAGE */
-.edit-goal-content {
-  width: 70%;
+/*////////////////////////////////////////////////////////////////
+//////////////////////// EDIT / CREATE FORMS /////////////////////
+////////////////////////////////////////////////////////////////*/
+
+.edit-goal-content,
+.create-goal-content {
+  width: min(90%, 1100px);
   margin: 60px auto;
-  background-color: #f9fafb;
-  border-radius: 16px;
+  background-color: var(--bg-light);
+  border-radius: var(--radius);
   box-shadow: 0 4px 18px rgba(0, 0, 0, 0.08);
   padding: 50px 40px;
 }
 
-/* Form Card */
 .form-card {
   border: none;
-  border-radius: 16px;
+  border-radius: var(--radius);
   box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
   padding: 40px;
   background: #fff;
 }
 
 .form-card h3 {
-  color: #1a1a1a;
+  color: var(--text-dark);
   text-align: center;
   font-weight: 700;
   margin-bottom: 30px;
 }
 
-/* Inputs */
 .form-control {
   border-radius: 10px;
   padding: 12px 15px;
@@ -357,11 +362,11 @@ body {
 
 label.form-label {
   font-weight: 600;
-  color: #2c3e50;
+  color: var(--text-dark);
 }
 
-/* Buttons */
-.btn-save, .btn-add-goal {
+.btn-save,
+.btn-add-goal {
   background-color: #f97316 !important;
   border: none;
   color: #fff;
@@ -379,23 +384,65 @@ label.form-label {
   transform: translateY(-2px);
 }
 
-/* CREATE PAGE */
-.create-goal-content {
-  width: 70%;
-  margin: 60px auto;
-  background-color: #f9fafb;
-  border-radius: 16px;
-  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.08);
-  padding: 50px 40px;
-  overflow: hidden;
+/*////////////////////////////////////////////////////////////////
+//////////////////////// IDOL CARDS SECTION //////////////////////
+////////////////////////////////////////////////////////////////*/
+
+.idol-cards {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 25px;
+  padding: 20px;
 }
 
-/* Responsive Design */
+.idol-card {
+  width: 300px;
+  border-radius: 12px;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.idol-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 15px var(--shadow);
+}
+
+.idol-card img {
+  height: 200px;
+  object-fit: cover;
+  width: 100%;
+}
+
+.add-card {
+  border: 2px dashed #ccc;
+  background: #f9f9f9;
+  transition: background 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 200px;
+}
+
+.add-card:hover {
+  background: #e9ecef;
+}
+
+/*////////////////////////////////////////////////////////////////
+//////////////////////// RESPONSIVE DESIGN ///////////////////////
+////////////////////////////////////////////////////////////////*/
+@media (min-width: 992px) {
+  .content {
+    margin-left: 200px;
+  }
+}
 @media (max-width: 992px) {
   .mortgage-content,
   .edit-goal-content,
   .create-goal-content {
-    width: 85%;
+    width: 95%;
     padding: 30px 25px;
   }
 
@@ -408,16 +455,13 @@ label.form-label {
   }
 }
 
-@media (max-width: 576px) {
+@media (max-width: 768px) {
+  .content,
   .mortgage-content,
   .edit-goal-content,
   .create-goal-content {
     width: 95%;
     padding: 20px;
-  }
-
-  .mort-list-card {
-    border-radius: 12px;
   }
 
   .form-card {
@@ -431,56 +475,7 @@ label.form-label {
   .mort-list-card .card-title {
     font-size: 1.1rem;
   }
-}
 
-  
-    /*//////////////////////////////////////////////////////////////
-    /////////////////
-    /////////////////-------------IDOLLL---------------
-    ////////////////////////////////////////////////////////////////*/
-
-/* Container for all cards */
-.idol-cards {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-}
-
-/* Individual card styling */
-.idol-card {
-  width: 300px;
-  border-radius: 12px;
-  overflow: hidden;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.idol-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15);
-}
-
-/* Image styling */
-.idol-card img {
-  height: 200px;
-  object-fit: cover;
-}
-
-/* Add card styling */
-.add-card {
-  border: 2px dashed #ccc;
-  background: #f9f9f9;
-  transition: background 0.3s ease;
-}
-
-.add-card:hover {
-  background: #e9ecef;
-}
-
-/* Responsive adjustments */
-@media (max-width: 768px) {
-  .content {
-    width: 90%;
-  }
   .idol-card {
     width: 100%;
   }

@@ -1,14 +1,78 @@
-<%- layout("layout/boilerplate")  %>
+<%- layout("layout/boilerplate") %>
 
-           <div class="content">
-    <div class="container-text">
-      <h4>Hello, Students — Welcome to this Mindfulness Journey</h4>
-      <p>Let's learn together and improve our self-observation.</p>
-      <button class="primary-btn">Know Yourself</button>
-    </div>
+<style>
+  .container-text {
+  flex: 1 1 45%;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
 
-    <div class="image-section">
-      <img src="https://images.unsplash.com/photo-1499793983690-e29da59ef1c2?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=60" alt="Mindfulness Image">
-      <button class="upload-btn">Upload Image</button>
-    </div>
-  </div
+.container-text h4 {
+  font-family: 'Ruslan Display', cursive;
+  font-weight: 400;
+  color: #2789f9;
+    text-shadow: 0 0 6px #399f9f;
+  letter-spacing: 1.5px;
+}
+
+
+
+.container-text p {
+    font-family: 'Ruslan Display', cursive;
+  font-size: 1.1rem;
+  color: #6078d6;
+  line-height: 1.6;
+}
+
+.container-text .btn-warning {
+  align-self: flex-start;
+  padding: 10px 24px;
+  font-weight: 600;
+  border-radius: 30px;
+  background-color: #583098d0;
+  color: #fff;
+  border: none;
+  transition: 0.3s ease;
+}
+
+.container-text .btn-warning:hover {
+  background-color: #4083ca;
+  transform: translateY(-2px);
+}
+
+/* ====== IMAGE SECTION ====== */
+.image-section {
+  flex: 1 1 50%;
+  overflow: hidden;
+  border-radius: 16px;
+  position: relative;
+}
+
+.image-section img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: inherit;
+  transition: transform 0.5s ease;
+}
+
+.image-section img:hover {
+  transform: scale(1.05);
+}
+
+</style>
+
+<div class="content">
+  <div class="container-text">
+    <h4>Hello, Students Welcome to Self Analyse Mission🎓</h4>
+    <p>Let's learn together and improve our self-observation.  
+       Every great change begins with awareness — let's start your inner rise.</p>
+    <button class="btn btn-warning">Know Yourself</button>
+  </div>
+
+  <div class="image-section">
+    <img src="https://static0.cbrimages.com/wordpress/wp-content/uploads/2024/05/solo-leveling-arise.jpg?w=1200&h=675&fit=crop" 
+         alt="Mindfulness Image">
+  </div>
+</div>

@@ -1,0 +1,23 @@
+<% if (successMsg && successMsg.length > 0) { %>
+  <div class="d-flex justify-content-center mt-3">
+    <div class="alert alert-success alert-dismissible fade show d-flex align-items-center shadow-sm rounded-3 py-2 px-3"
+         role="alert"
+         style="font-size: 0.95rem; max-width: 420px; width: fit-content; white-space: normal; word-break: break-word;">
+      <i class="bi bi-check-circle-fill me-2" style="font-size: 1.2rem;"></i>
+      <div class="flex-grow-1"><%= successMsg %></div>
+      <button type="button" class="btn-close ms-3" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+  </div>
+<% } %>
+
+<% if (errorMsg && errorMsg.length > 0) { %>
+  <div class="d-flex justify-content-center mt-3">
+    <div class="alert alert-danger alert-dismissible fade show d-flex align-items-center shadow-sm rounded-3 py-2 px-3"
+         role="alert"
+         style="font-size: 0.95rem; max-width: 420px; width: fit-content; white-space: normal; word-break: break-word;">
+      <i class="bi bi-exclamation-triangle-fill me-2" style="font-size: 1.2rem;"></i>
+      <div class="flex-grow-1"><%= errorMsg %></div>
+      <button type="button" class="btn-close ms-3" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+  </div>
+<% } %>

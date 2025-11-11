@@ -1,0 +1,72 @@
+Arisemax
+├── README.md
+├── cloudConfig.js
+├── file-tree.txt
+├── init
+│   ├── arise.js
+│   ├── data.js
+│   ├── expodata.js
+│   ├── index.js
+│   ├── index2.js
+│   ├── index3.js
+│   ├── index4.js
+│   ├── index5.js
+│   ├── index6.js
+│   ├── index7.js
+│   └── index8.js
+├── main.js
+├── models
+│   ├── afr.js
+│   ├── arise.js
+│   ├── daily.js
+│   ├── expo.js
+│   ├── go.js
+│   ├── idol.js
+│   ├── know.js
+│   └── mortgage.js
+├── package-lock.json
+├── package.json
+├── public
+│   ├── css
+│   │   └── style.css
+│   └── js
+│       └── script.js
+├── routes
+│   └── mort.js
+├── schema.js
+├── utils
+│   ├── ExpressEroor.js
+│   └── wrapAsync.js
+└── views
+    ├── error.ejs
+    ├── includes
+    │   ├── flash.ejs
+    │   └── sidebar.ejs
+    ├── layout
+    │   └── boilerplate.ejs
+    ├── listings
+    │   ├── afradd.ejs
+    │   ├── afredit.ejs
+    │   ├── afrindex.ejs
+    │   ├── ariseindex.ejs
+    │   ├── dailyadd.ejs
+    │   ├── dailyedit.ejs
+    │   ├── dailyindex.ejs
+    │   ├── expoadd.ejs
+    │   ├── expoedit.ejs
+    │   ├── expoindex.ejs
+    │   ├── goadd.ejs
+    │   ├── goedit.ejs
+    │   ├── goindex.ejs
+    │   ├── home.ejs
+    │   ├── idoladd.ejs
+    │   ├── idoledit.ejs
+    │   ├── idolindex.ejs
+    │   ├── knowadd.ejs
+    │   ├── knowedit.ejs
+    │   ├── knowindex.ejs
+    │   ├── mortadd.ejs
+    │   ├── mortedit.ejs
+    │   └── mortindex.ejs
+    └── routes
+        └── mort.js

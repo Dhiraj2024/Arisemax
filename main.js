@@ -1,18 +1,41 @@
+if(process.env.NODE_ENV != "production"){
+require("dotenv").config();
+}
+console.log(process.env.SECRET);
+
 const express = require("express");
 const app = express();
 const mongoose = require('mongoose');
-const Mort = require("./models/mortgage.js");
-const Afr = require("./models/afr.js");
-const Daily = require("./models/daily.js");
-const Know = require("./models/know.js");
-const Go = require("./models/go.js");
-const Idol = require("./models/idol.js");
-const Expo = require("./models/expo.js");
+//const Mort = require("./models/mortgage.js");
+// const Afr = require("./models/afr.js");
+// const Daily = require("./models/daily.js");
+// const Know = require("./models/know.js");
+// const Go = require("./models/go.js");
+// const Idol = require("./models/idol.js");
+// const Expo = require("./models/expo.js");
+const Arise = require("./models/arise.js");
 const path = require("path");
 const methodOverride = require("method-override");
 const ejsMate = require("ejs-mate");
 const ExpressError = require("./utils/ExpressEroor.js");
-const wrapAsync = require("./utils/wrapAsync.js");
+const wrapAsync = require("./utils/wrapAsync.js");//
+const multer = require('multer');
+// const upload = multer({dest: 'uploads/' });
+const {storage } = require("./cloudConfig.js");
+const upload = multer({storage});
+const mort = require("./routes/mort");
+const afr = require("./routes/afr");
+const daily = require("./routes/daily");
+const go = require("./routes/go");
+const expo = require("./routes/expo");
+const know = require("./routes/know");
+const idol = require("./routes/idol");
+
+
+const session = require("express-session");
+const cookieParser = require("cookie-parser");
+
+const flash = require("connect-flash");
 
 const MONGO_URL="mongodb://127.0.0.1:27017/Arisemax";   
 
@@ -22,6 +45,30 @@ app.set("views", path.join(__dirname, "views"));  // ✅ sahi function join()
  app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
 app.engine('ejs',ejsMate);
+
+app.use(cookieParser("secretcode"));//signed cookie
+
+const sessionOptions = {
+    secret: "MySupersecretcode" ,
+    resave: false ,
+    saveUninitialized: true,
+    cookie: {
+        expires: Date.now() + 7 * 24 * 60 * 1000,
+        maxAge: 7*24*60*60*1000 , 
+        httpOnly: true,
+    },
+};
+
+app.use(session(sessionOptions));
+app.use(flash());
+
+//midleware for flash--------
+app.use((req, res ,next ) =>{
+  res.locals.successMsg  = req.flash("success");   // ✅ sahi key
+    res.locals.errorMsg = req.flash("error");       // ✅ sahi key
+  res.locals.currUser = req.user;///yaha hi curruser ya username
+    next();
+});
 
 main()
 .then(() => {
@@ -34,6 +81,8 @@ console.log("connection successfull");
 async function main() {
  await  mongoose.connect(MONGO_URL);   
 }
+/////////////VALIDATION//////////////
+
 
 
 const validateListing = (req,res,next) => {
@@ -51,294 +100,324 @@ const validateListing = (req,res,next) => {
 app.get("/", (req, res) => {
      res.render("listings/home.ejs");
 });
-//Mortindex
-app.get("/mort",async(req, res) => {
-    const allMort = await Mort.find({});
-     res.render("listings/mortindex",{allMort});
-});
-//Created save Route
-app.post("/mort", wrapAsync(async (req, res) => {
-  const newMort = new Mort(req.body.mort);
-  await newMort.save();
-  res.redirect("/mort");
-//   res.redirect("listings/mortindex");
-}));
-//mortnew---
-app.get("/mort/new", (req, res) => {
-  res.render("listings/mortadd");
-});
+////////////////////MORTGADGE ????????????????????
+//////////////////////////////////////////////////
 
-//Edit Route
-app.get("/mort/:id/edit", async (req, res) => {
-  let { id } = req.params;
-  const mort = await Mort.findById(id);
-  res.render("listings/mortedit.ejs", { mort });
-});
+// //Mortindex
+// app.get("/mort",async(req, res) => {
+//     const allMort = await Mort.find({});
+//      res.render("listings/mortindex",{allMort});
+// });
+// //Created save Route
+// app.post("/mort", wrapAsync(async (req, res) => {
+//   const newMort = new Mort(req.body.mort);
+//   await newMort.save();
+//   req.flash("success","New Pain is created...");
+//   res.redirect("/mort");
+// //   res.redirect("listings/mortindex");
+// }));
+// //mortnew---
+// app.get("/mort/new", (req, res) => {
+//   res.render("listings/mortadd");
+// });
 
-//Update Route
-app.put("/mort/:id", async (req, res) => {
-  let { id } = req.params;
-  await Mort.findByIdAndUpdate(id, { ...req.body.mort });
-  res.redirect(`/mort`);
-});
+// //Edit Route
+// app.get("/mort/:id/edit", async (req, res) => {
+//   let { id } = req.params;
+//   const mort = await Mort.findById(id);
+//   res.render("listings/mortedit.ejs", { mort });
+// });
 
-//Delete Route
-app.delete("/mort/:id", async (req, res) => {
-  let { id } = req.params;
-  let deletedMort = await Mort.findByIdAndDelete(id);
-  console.log(deletedMort);
-  res.redirect("/mort");
-});
+// //Update Route
+// app.put("/mort/:id", async (req, res) => {
+//   let { id } = req.params;
+//   await Mort.findByIdAndUpdate(id, { ...req.body.mort });
+//   res.redirect(`/mort`);
+// });
+
+// //Delete Route
+// app.delete("/mort/:id", async (req, res) => {
+//   let { id } = req.params;
+//   let deletedMort = await Mort.findByIdAndDelete(id);
+//   console.log(deletedMort);
+//   res.redirect("/mort");
+// });
+
+app.use("/mort", mort);
 
 ////////////////////AFFERMATION////////////////////////
 //////////////////////////////////////////////////
-//Afrindex
-app.get("/afr",async(req, res) => {
-    const allAfr = await Afr.find({});
-     res.render("listings/afrindex",{allAfr});
-});
-//Created save Route
-app.post("/afr", wrapAsync(async (req, res) => {
-  const newAfr = new Afr(req.body.afr);
-  await newAfr.save();
-  res.redirect("/afr");
-//   res.redirect("listings/mortindex");
-}));
-//mortnew---
-app.get("/afr/new", (req, res) => {
-  res.render("listings/afradd");
-});
+// //Afrindex
+// app.get("/afr",async(req, res) => {
+//     const allAfr = await Afr.find({});
+//      res.render("listings/afrindex",{allAfr});
+// });
+// //Created save Route
+// app.post("/afr", wrapAsync(async (req, res) => {
+//   const newAfr = new Afr(req.body.afr);
+//   await newAfr.save();
+//   res.redirect("/afr");
+// //   res.redirect("listings/mortindex");
+// }));
+// //mortnew---
+// app.get("/afr/new", (req, res) => {
+//   res.render("listings/afradd");
+// });
 
-//Edit Route
-app.get("/afr/:id/edit", async (req, res) => {
-  let { id } = req.params;
-  const afr = await Afr.findById(id);
-  res.render("listings/afredit.ejs", { afr });
-});
+// //Edit Route
+// app.get("/afr/:id/edit", async (req, res) => {
+//   let { id } = req.params;
+//   const afr = await Afr.findById(id);
+//   res.render("listings/afredit.ejs", { afr });
+// });
 
-//Update Route
-app.put("/afr/:id", async (req, res) => {
-  let { id } = req.params;
-  await Afr.findByIdAndUpdate(id, { ...req.body.afr});
-  res.redirect(`/afr`);
-});
+// //Update Route
+// app.put("/afr/:id", async (req, res) => {
+//   let { id } = req.params;
+//   await Afr.findByIdAndUpdate(id, { ...req.body.afr});
+//   res.redirect(`/afr`);
+// });
 
-//Delete Route
-app.delete("/afr/:id", async (req, res) => {
-  let { id } = req.params;
-  let deletedAfr = await Afr.findByIdAndDelete(id);
-  console.log(deletedAfr);
-  res.redirect("/afr");
-});
-
+// //Delete Route
+// app.delete("/afr/:id", async (req, res) => {
+//   let { id } = req.params;
+//   let deletedAfr = await Afr.findByIdAndDelete(id);
+//   console.log(deletedAfr);
+//   res.redirect("/afr");
+// });
+app.use("/afr", afr);
 
 ////////////////////Daily Aims////////////////////////
 //////////////////////////////////////////////////
 
-app.get("/daily",async(req, res) => {
-    const allDaily = await Daily.find({});
-     res.render("listings/dailyindex",{allDaily});
-});
-//Created save Route
-app.post("/daily", wrapAsync(async (req, res) => {
-  const newDaily = new Daily(req.body.daily);
-  await newDaily.save();
-  res.redirect("/daily");
-//   res.redirect("listings/mortindex");
-}));
-//mortnew---
-app.get("/daily/new", (req, res) => {
-  res.render("listings/dailyadd");
-});
+// app.get("/daily",async(req, res) => {
+//     const allDaily = await Daily.find({});
+//      res.render("listings/dailyindex",{allDaily});
+// });
+// //Created save Route
+// app.post("/daily", wrapAsync(async (req, res) => {
+//   const newDaily = new Daily(req.body.daily);
+//   await newDaily.save();
+//   res.redirect("/daily");
+// //   res.redirect("listings/mortindex");
+// }));
+// //mortnew---
+// app.get("/daily/new", (req, res) => {
+//   res.render("listings/dailyadd");
+// });
 
-//Edit Route
-app.get("/daily/:id/edit", async (req, res) => {
-  let { id } = req.params;
-  const daily = await Daily.findById(id);
-  res.render("listings/dailyedit.ejs", { daily });
-});
+// //Edit Route
+// app.get("/daily/:id/edit", async (req, res) => {
+//   let { id } = req.params;
+//   const daily = await Daily.findById(id);
+//   res.render("listings/dailyedit.ejs", { daily });
+// });
 
-//Update Route
-app.put("/daily/:id", async (req, res) => {
-  let { id } = req.params;
-  await Daily.findByIdAndUpdate(id, { ...req.body.daily});
-  res.redirect(`/daily`);
-});
+// //Update Route
+// app.put("/daily/:id", async (req, res) => {
+//   let { id } = req.params;
+//   await Daily.findByIdAndUpdate(id, { ...req.body.daily});
+//   res.redirect(`/daily`);
+// });
 
-//Delete Route
-app.delete("/daily/:id", async (req, res) => {
-  let { id } = req.params;
-  let deletedDaily = await Daily.findByIdAndDelete(id);
-  console.log(deletedDaily);
-  res.redirect("/daily");
-});
-
+// //Delete Route
+// app.delete("/daily/:id", async (req, res) => {
+//   let { id } = req.params;
+//   let deletedDaily = await Daily.findByIdAndDelete(id);
+//   console.log(deletedDaily);
+//   res.redirect("/daily");
+// });
+app.use("/daily", daily);
 ////////////////////Goal////////////////////////
 //////////////////////////////////////////////////
 
-app.get("/go",async(req, res) => {
-    const allGo = await Go.find({});
-     res.render("listings/goindex",{allGo});
-});
-//Created save Route
-app.post("/go", wrapAsync(async (req, res) => {
-  const newGo = new Go(req.body.go);
-  await newGo.save();
-  res.redirect("/go");
-//   res.redirect("listings/gotindex");
-}));
-//mortnew---
-app.get("/go/new", (req, res) => {
-  res.render("listings/goadd");
-});
+// app.get("/go",async(req, res) => {
+//     const allGo = await Go.find({});
+//      res.render("listings/goindex",{allGo});
+// });
+// //Created save Route
+// app.post("/go", wrapAsync(async (req, res) => {
+//   const newGo = new Go(req.body.go);
+//   await newGo.save();
+//   res.redirect("/go");
+// //   res.redirect("listings/gotindex");
+// }));
+// //mortnew---
+// app.get("/go/new", (req, res) => {
+//   res.render("listings/goadd");
+// });
 
-//Edit Route
-app.get("/go/:id/edit", async (req, res) => {
-  let { id } = req.params;
-  const go = await Go.findById(id);
-  res.render("listings/goedit.ejs", { go });
-});
+// //Edit Route
+// app.get("/go/:id/edit", async (req, res) => {
+//   let { id } = req.params;
+//   const go = await Go.findById(id);
+//   res.render("listings/goedit.ejs", { go });
+// });
 
-//Update Route
-app.put("/go/:id", async (req, res) => {
-  let { id } = req.params;
-  await Go.findByIdAndUpdate(id, { ...req.body.go});
-  res.redirect(`/go`);
-});
+// //Update Route
+// app.put("/go/:id", async (req, res) => {
+//   let { id } = req.params;
+//   await Go.findByIdAndUpdate(id, { ...req.body.go});
+//   res.redirect(`/go`);
+// });
 
-//Delete Route
-app.delete("/go/:id", async (req, res) => {
-  let { id } = req.params;
-  let deletedGo = await Go.findByIdAndDelete(id);
-  console.log(deletedGo);
-  res.redirect("/go");
-});
-
+// //Delete Route
+// app.delete("/go/:id", async (req, res) => {
+//   let { id } = req.params;
+//   let deletedGo = await Go.findByIdAndDelete(id);
+//   console.log(deletedGo);
+//   res.redirect("/go");
+// });
+app.use("/go", go);
 ////////////////////Know////////////////////////
 //////////////////////////////////////////////////
 
-app.get("/know",async(req, res) => {
-    const allKnow = await Know.find({});
-     res.render("listings/knowindex",{allKnow});
-});
-//Created save Route
-app.post("/know", wrapAsync(async (req, res) => {
-  const newGo = new Know(req.body.know);
-  await newKnow.save();
-  res.redirect("/know");
-//   res.redirect("listings/gotindex");
-}));
-//mortnew---
-app.get("/know/new", (req, res) => {
-  res.render("listings/knowadd");
-});
+// app.get("/know",async(req, res) => {
+//     const allKnow = await Know.find({});
+//      res.render("listings/knowindex",{allKnow});
+// });
+// //Created save Route
+// app.post("/know", wrapAsync(async (req, res) => {
+//   const newKnow = new Know(req.body.know);
+//   await newKnow.save();
+//   res.redirect("/know");
+// //   res.redirect("listings/gotindex");
+// }));
+// //mortnew---
+// app.get("/know/new", (req, res) => {
+//   res.render("listings/knowadd");
+// });
 
-//Edit Route
-app.get("/know/:id/edit", async (req, res) => {
-  let { id } = req.params;
-  const know = await Know.findById(id);
-  res.render("listings/knowedit.ejs", { know });
-});
+// //Edit Route
+// app.get("/know/:id/edit", async (req, res) => {
+//   let { id } = req.params;
+//   const know = await Know.findById(id);
+//   res.render("listings/knowedit.ejs", { know });
+// });
 
-//Update Route
-app.put("/know/:id", async (req, res) => {
-  let { id } = req.params;
-  await Know.findByIdAndUpdate(id, { ...req.body.know});
-  res.redirect(`/know`);
-});
+// //Update Route
+// app.put("/know/:id", async (req, res) => {
+//   let { id } = req.params;
+//   await Know.findByIdAndUpdate(id, { ...req.body.know});
+//   res.redirect(`/know`);
+// });
 
-//Delete Route
-app.delete("/know/:id", async (req, res) => {
-  let { id } = req.params;
-  let deletedKnow = await Know.findByIdAndDelete(id);
-  console.log(deletedKnow);
-  res.redirect("/know");
-});
+// //Delete Route
+// app.delete("/know/:id", async (req, res) => {
+//   let { id } = req.params;
+//   let deletedKnow = await Know.findByIdAndDelete(id);
+//   console.log(deletedKnow);
+//   res.redirect("/know");
+// });
 
 
-
+app.use("/know", know);
 ///////////////////IDOLS////////////////////////
 //////////////////////////////////////////////////
 
-app.get("/idol",async(req, res) => {
-    const allIdol = await Idol.find({});
-     res.render("listings/idolindex",{allIdol});
-});
-//Created save Route
-app.post("/idol", wrapAsync(async (req, res) => {
-  const newIdol = new Idol(req.body.idol);
-  await newIdol.save();
-  res.redirect("/idol");
-//   res.redirect("listings/gotindex");
-}));
-//mortnew---
-app.get("/idol/new", (req, res) => {
-  res.render("listings/idoladd");
-});
+// app.get("/idol",async(req, res) => {
+//     const allIdol = await Idol.find({});
+//      res.render("listings/idolindex",{allIdol});
+// });
+// //Created save Route
+// app.post(
+//   "/idol",
+//   upload.single("idol[image]"),
+//   wrapAsync(async (req, res) => {
+//     console.log("📦 Uploaded File:", req.file);
+//     // Cloudinary se image info aati hai:
+//     const { path, filename } = req.file;
 
-//Edit Route
-app.get("/idol/:id/edit", async (req, res) => {
-  let { id } = req.params;
-  const idol = await Idol.findById(id);
-  res.render("listings/idoledit.ejs", { idol });
-});
+//     const newIdol = new Idol(req.body.idol);
+//     newIdol.image = { url: path, filename };
 
-//Update Route
-app.put("/idol/:id", async (req, res) => {
-  let { id } = req.params;
-  await Idol.findByIdAndUpdate(id, { ...req.body.idol});
-  res.redirect(`/idol`);
-});
+//     await newIdol.save();
 
-//Delete Route
-app.delete("/idol/:id", async (req, res) => {
-  let { id } = req.params;
-  let deletedIdol = await Idol.findByIdAndDelete(id);
-  console.log(deletedIdol);
-  res.redirect("/idol");
-});
+//     console.log("✅ Idol saved:", newIdol);
+//     res.redirect("/idol");
+//   })
+// );
 
+// //idolnew---
+// app.get("/idol/new", (req, res) => {
+//   res.render("listings/idoladd");
+// });
 
+// //Edit Route
+// app.get("/idol/:id/edit", async (req, res) => {
+//   let { id } = req.params;
+//   const idol = await Idol.findById(id);
+//   res.render("listings/idoledit.ejs", { idol });
+// });
+
+// //Update Route
+// app.put("/idol/:id", async (req, res) => {
+//   let { id } = req.params;
+//   await Idol.findByIdAndUpdate(id, { ...req.body.idol});
+//   res.redirect(`/idol`);
+// });
+
+// //Delete Route
+// app.delete("/idol/:id", async (req, res) => {
+//   let { id } = req.params;
+//   let deletedIdol = await Idol.findByIdAndDelete(id);
+//   console.log(deletedIdol);
+//   res.redirect("/idol");
+// });
+app.use("/idol", idol);
 ///////////////////EXPLOREEE////////////////////////
 //////////////////////////////////////////////////
 
-app.get("/expo",async(req, res) => {
-    const allExpo = await Expo.find({});
-     res.render("listings/expoindex",{allExpo});
-});
-//Created save Route
-app.post("/expo", wrapAsync(async (req, res) => {
-  const newExpo = new Expo(req.body.expo);
-  await newExpo.save();
-  res.redirect("/expo");
-//   res.redirect("listings/gotindex");
-}));
-//mortnew---
-app.get("/expo/new", (req, res) => {
-  res.render("listings/expoadd");
+// app.get("/expo",async(req, res) => {
+//     const allExpo = await Expo.find({});
+//      res.render("listings/expoindex",{allExpo});
+// });
+// //Created save Route
+// app.post("/expo", wrapAsync(async (req, res) => {
+//   const newExpo = new Expo(req.body.expo);
+//   await newExpo.save();
+//   req.flash("success","New Journey has Started...");
+//   res.redirect("/expo");
+// //   res.redirect("listings/gotindex");
+// }));
+// //mortnew---
+// app.get("/expo/new", (req, res) => {
+//   res.render("listings/expoadd");
+// });
+
+// //Edit Route
+// app.get("/expo/:id/edit", async (req, res) => {
+//   let { id } = req.params;
+//   const expo = await Expo.findById(id);
+//   res.render("listings/expoedit.ejs", { expo });
+// });
+
+// //Update Route
+// app.put("/expo/:id", async (req, res) => {
+//   let { id } = req.params;
+//   await Expo.findByIdAndUpdate(id, { ...req.body.expo});
+//   res.redirect(`/expo`);
+// });
+
+// //Delete Route
+// app.delete("/expo/:id", async (req, res) => {
+//   let { id } = req.params;
+//   let deletedExpo = await Expo.findByIdAndDelete(id);
+//   console.log(deletedExpo);
+//   res.redirect("/expo");
+// });
+
+app.use("/expo", expo);
+//////////////////  ARISE  ////////////////////////
+//////////////////////////////////////////////////
+
+app.get("/arise",async(req, res) => {
+    const allArise = await Arise.find({});
+     res.render("listings/ariseindex",{allArise});
 });
 
-//Edit Route
-app.get("/expo/:id/edit", async (req, res) => {
-  let { id } = req.params;
-  const expo = await Expo.findById(id);
-  res.render("listings/expoedit.ejs", { expo });
-});
 
-//Update Route
-app.put("/expo/:id", async (req, res) => {
-  let { id } = req.params;
-  await Expo.findByIdAndUpdate(id, { ...req.body.expo});
-  res.redirect(`/expo`);
-});
 
-//Delete Route
-app.delete("/expo/:id", async (req, res) => {
-  let { id } = req.params;
-  let deletedExpo = await Expo.findByIdAndDelete(id);
-  console.log(deletedExpo);
-  res.redirect("/expo");
-});
 
 
 
@@ -358,5 +437,3 @@ app.use((err, req, res, next) => {
 app.listen(8090, () => {
     console.log(`app is listening on port 8090`);
 });
-
-
