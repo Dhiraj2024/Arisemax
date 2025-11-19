@@ -1,0 +1,148 @@
+<%- layout("layout/boilerplate") %>
+
+<style>
+  .container-text {
+  flex: 1 1 45%;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.container-text h4 {
+  font-family: 'Ruslan Display', cursive;
+  font-weight: 400;
+  color: #2789f9;
+    text-shadow: 0 0 6px #399f9f;
+  letter-spacing: 1.5px;
+}
+
+
+
+.container-text p {
+    font-family: 'Ruslan Display', cursive;
+  font-size: 1.1rem;
+  color: #6078d6;
+  line-height: 1.6;
+}
+
+.container-text .btn-warning {
+  align-self: flex-start;
+  padding: 10px 24px;
+  font-weight: 600;
+  border-radius: 30px;
+  background-color: #583098d0;
+  color: #fff;
+  border: none;
+  transition: 0.3s ease;
+}
+
+.container-text .btn-warning:hover {
+  background-color: #4083ca;
+  transform: translateY(-2px);
+}
+
+/* ====== IMAGE SECTION ====== */
+.image-section {
+  flex: 1 1 50%;
+  overflow: hidden;
+  border-radius: 16px;
+  position: relative;
+}
+
+.image-section img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: inherit;
+  transition: transform 0.5s ease;
+}
+
+.image-section img:hover {
+  transform: scale(1.05);
+}
+
+</style>
+
+<div class="content">
+  <div class="container-text">
+    <h4>Hello, Students Welcome to Self Analyse Mission🎓</h4>
+    <p>Let's learn together and improve our self-observation.  
+       Every great change begins with awareness — let's start your inner rise.</p>
+    <button class="btn btn-warning" id="knowBtn">Know Yourself</button>
+  </div>
+
+  <div class="image-section">
+    <img src="https://static0.cbrimages.com/wordpress/wp-content/uploads/2024/05/solo-leveling-arise.jpg?w=1200&h=675&fit=crop" 
+         alt="Mindfulness Image">
+  </div>
+<div id="musicPlayer" style="
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  background: #fff;
+  padding: 10px 15px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.3);
+  display: none;
+  align-items: center;
+  gap: 10px;
+  z-index: 9999;
+">
+  <span id="musicStatus">Playing...</span>
+
+  <button id="toggleMusic" style="
+    border:none;
+    background: orange;
+    padding: 5px 10px;
+    border-radius: 8px;
+    color: white;
+    cursor: pointer;
+  ">
+    ⏸ Pause
+  </button>
+</div>
+
+
+</div>
+
+<!-- Audio -->
+<audio id="introAudio">
+  <source src="/audio/SUNG JIN WOO SONG  Better Me  ANIMETRIX ft. None Like Joshua [SOLO LEVELING] - ANIMETRIX.mp3" type="audio/mp3">
+</audio>
+
+<script>
+  const btn = document.getElementById("knowBtn");
+  const audio = document.getElementById("introAudio");
+  const player = document.getElementById("musicPlayer");
+  const toggleBtn = document.getElementById("toggleMusic");
+  const status = document.getElementById("musicStatus");
+
+ // 🔸 KNOW YOURSELF BUTTON → MUSIC START + POPUP SHOW
+  btn.addEventListener("click", () => {
+    audio.play();
+    player.style.display = "flex";
+  });
+
+  // 🔸 PLAY/PAUSE BUTTON
+  toggleBtn.addEventListener("click", () => {
+    if (audio.paused) {
+      audio.play();
+      toggleBtn.textContent = "⏸ Pause";
+      status.textContent = "Playing...";
+    } else {
+      audio.pause();
+      toggleBtn.textContent = "▶ Play";
+      status.textContent = "Paused";
+    }
+  });
+
+  // 🔸 TAB CHANGE PAR MUSIC BAND NA HO — Already works (audio will continue)
+  document.addEventListener("visibilitychange", () => {
+    // Kuch nahi karna — audio continue chalega
+  });
+
+  // 🔸 WEBSITE CLOSE → MUSIC STOP
+  window.addEventListener("beforeunload", () => {
+    audio.pause();
+  });
+</script>

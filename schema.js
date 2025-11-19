@@ -56,4 +56,26 @@ const idolSchema = Joi.object({
   }).required(),
 });
 
-module.exports = { afrSchema, dailySchema, expoSchema, goSchema ,idolSchema };
+//6 mortgage
+const mortSchema = Joi.object({
+  mort: Joi.object({
+    title: Joi.string().required(),
+    description: Joi.string().allow("", null),
+    image: Joi.object({
+      filename: Joi.string().allow("", null),
+      url: Joi.string().uri().allow("", null),
+    }).optional(),
+  }).required(),
+});
+
+
+//6 mortgage
+const userSchema = Joi.object({
+  user: Joi.object({
+    email:{
+        type:String,
+      required: true,
+    },
+})
+});
+module.exports = { afrSchema, dailySchema, expoSchema, goSchema ,idolSchema ,mortSchema,userSchema};

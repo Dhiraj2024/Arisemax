@@ -22,6 +22,11 @@ const mortSchema = new Schema({
           : v,
     },
   },
+    owner: {
+    type: Schema.Types.ObjectId,
+    ref: "User",
+    required: true,
+  },
 });
 const Mort= mongoose.model("Mort", mortSchema);
 module.exports = Mort;

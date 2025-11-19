@@ -22,6 +22,12 @@ const idolSchema = new Schema({
           : v,
     },
   },
+    owner: {
+    type: Schema.Types.ObjectId,
+    ref: "User",
+    required: true,
+  },
+
 });
 const Idol= mongoose.model("Idol", idolSchema);
 module.exports = Idol;

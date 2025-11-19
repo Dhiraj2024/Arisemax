@@ -23,15 +23,20 @@ const multer = require('multer');
 // const upload = multer({dest: 'uploads/' });
 const {storage } = require("./cloudConfig.js");
 const upload = multer({storage});
+const User = require("./models/user"); // ✅ import your User model
 const mort = require("./routes/mort");
 const afr = require("./routes/afr");
+const pend = require("./routes/pend");
 const daily = require("./routes/daily");
 const go = require("./routes/go");
 const expo = require("./routes/expo");
 const know = require("./routes/know");
 const idol = require("./routes/idol");
+const userRouter = require("./routes/user");
 
 
+const passport = require("passport");
+const LocalStrategy =require("passport-local");
 const session = require("express-session");
 const cookieParser = require("cookie-parser");
 
@@ -46,8 +51,6 @@ app.set("views", path.join(__dirname, "views"));  // ✅ sahi function join()
 app.use(methodOverride("_method"));
 app.engine('ejs',ejsMate);
 
-app.use(cookieParser("secretcode"));//signed cookie
-
 const sessionOptions = {
     secret: "MySupersecretcode" ,
     resave: false ,
@@ -59,8 +62,19 @@ const sessionOptions = {
     },
 };
 
+
+// ✅ Use middlewares (in correct order)
 app.use(session(sessionOptions));
 app.use(flash());
+app.use(cookieParser("secretcode"));
+app.use(passport.initialize());
+app.use(passport.session());
+
+// ✅ Passport setup
+passport.use(new LocalStrategy(User.authenticate()));
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
 
 //midleware for flash--------
 app.use((req, res ,next ) =>{
@@ -81,6 +95,13 @@ console.log("connection successfull");
 async function main() {
  await  mongoose.connect(MONGO_URL);   
 }
+
+
+app.use((req, res, next) => {
+  res.locals.currentUser = req.user;
+  next();
+});
+
 /////////////VALIDATION//////////////
 
 
@@ -187,6 +208,34 @@ app.use("/mort", mort);
 // });
 app.use("/afr", afr);
 
+
+
+////////////////////PENDINGS////////////////////////
+//////////////////////////////////////////////////
+// //Afrindex
+// app.get("/afr",async(req, res) => {
+//     const allAfr = await Afr.find({});
+//      res.render("listings/afrindex",{allAfr});
+// });
+// //Created save Route
+// app.post("/afr", wrapAsync(async (req, res) => {
+//   const newAfr = new Afr(req.body.afr);
+//   await newAfr.save();
+//   res.redirect("/afr");
+// //   res.redirect("listings/mortindex");
+// }));
+// //mortnew---
+// app.get("/afr/new", (req, res) => {
+//   res.render("listings/afradd");
+// });
+// //Delete Route
+// app.delete("/afr/:id", async (req, res) => {
+//   let { id } = req.params;
+//   let deletedAfr = await Afr.findByIdAndDelete(id);
+//   console.log(deletedAfr);
+//   res.redirect("/afr");
+// });
+app.use("/pend", pend);
 ////////////////////Daily Aims////////////////////////
 //////////////////////////////////////////////////
 
@@ -408,6 +457,10 @@ app.use("/idol", idol);
 // });
 
 app.use("/expo", expo);
+
+/////////LOGIN?SIGNUP???????????????????????
+//////////////////////////////////////////////
+app.use("/",userRouter);
 //////////////////  ARISE  ////////////////////////
 //////////////////////////////////////////////////
 

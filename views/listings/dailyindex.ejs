@@ -10,6 +10,8 @@
             <h5 class="card-title mb-1"><%= daily.title %></h5>
             <p class="card-text text-muted mb-0"><%= daily.description %></p>
           </div>
+
+             <% if (currentUser && currentUser._id.toString() === daily.owner.toString()) { %>
           <div class="d-flex ms-3 flex-shrink-0">
             <a href="/daily/<%= daily._id %>/edit" class="mort-btn-edit text-secondary me-3" title="Edit Entry">
               ✏️
@@ -20,6 +22,7 @@
               </button>
             </form>
           </div>
+           <% } %>
         </div>
       </div>
       <% } %>

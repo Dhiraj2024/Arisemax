@@ -22,6 +22,10 @@ const dailySchema = new Schema({
           : v,
     },
   },
+    owner:{
+      type:Schema.Types.ObjectId,
+      ref:"User",
+    },
 });
 const Daily= mongoose.model("Daily", dailySchema);
 module.exports = Daily;

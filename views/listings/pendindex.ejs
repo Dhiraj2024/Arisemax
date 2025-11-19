@@ -1,0 +1,35 @@
+<%- layout("layout/boilerplate")  %>
+<div class="content">
+<div class="mortgage-content">
+      <h2>Pending works</h2>
+
+      <% for(let pend of allPend) { %>
+      <div class="mort-list-card card mb-3">
+        <div class="card-body d-flex justify-content-between align-items-center ">
+          <div>
+            <h5 class="card-title mb-1"><%= pend.title %></h5>
+          </div>
+
+<% if (currentUser && pend.owner && currentUser._id.toString() === pend.owner.toString()) { %>
+
+            <form method="POST" action="/pend/<%= pend._id %>?_method=DELETE" style="display:inline;">
+              <button class="mort-btn-delete text-danger">
+                🗑️
+              </button>
+            </form>
+          <% } %>
+
+        </div>
+      </div>
+      <% } %>
+
+      <div class="mort-add-card card mt-4">
+        <div class="card-body p-4 text-center">
+          <a href="/pend/new" class="d-inline-flex align-items-center">
+            <span class="me-2" style="font-size: 1.25rem;">➕</span> Add New Goal
+          </a>
+        </div>
+      </div>
+
+  </div>
+</div>

@@ -1,0 +1,27 @@
+<%- layout("layout/boilerplate")  %>
+<div class="content">
+  <div class="create-goal-content">
+    <main class="container-fluid px-0">
+      <div class="card form-card bg-white mx-auto">
+        <h3>Add pending works</h3>
+        <form method="POST" action="/pend" novalidate class="needs-validation">
+          
+          <div class="mb-3">
+            <label for="pendTitle" class="form-label">Title</label>
+            <input
+              id="pendTitle"
+              name="pend[title]"
+              placeholder="Enter title"
+              type="text"
+              class="form-control"
+              required
+            />
+            <div class="valid-feedback">Title looks good!</div>
+            <div class="invalid-feedback">Please enter a title.</div>
+          </div>
+          <button class="btn btn-add-goal mt-3">Add Pendings...</button>
+        </form>
+      </div>
+    </main>
+  </div>
+  </div>

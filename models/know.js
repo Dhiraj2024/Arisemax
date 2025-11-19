@@ -22,6 +22,11 @@ const knowSchema = new Schema({
           : v,
     },
   },
+    owner: {
+    type: Schema.Types.ObjectId,
+    ref: "User",
+    required: true,
+  },
 });
 const Know= mongoose.model("Know", knowSchema);
 module.exports = Know;

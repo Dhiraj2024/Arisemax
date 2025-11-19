@@ -4,57 +4,74 @@ const wrapAsync = require("../utils/wrapAsync.js");
 const ExpressError = require("../utils/ExpressEroor.js");
 const { goSchema } = require("../schema.js");
 const Go = require("../models/go.js");
+const { isLoggedIn } = require("../middleware");
 
-
-const validateListing = (req,res,next) => {
- let {error} =  goSchema.validate(req.body);
-//  console.log(result); 
- if(error){
-    let errMsg = error.details.map((el)=> el.message).join(",");
-  throw new ExpressError(404, errMsg);
- }else{
+// Validate
+const validateListing = (req, res, next) => {
+  let { error } = goSchema.validate(req.body);
+  if (error) {
+    let errMsg = error.details.map((el) => el.message).join(",");
+    throw new ExpressError(404, errMsg);
+  } else {
     next();
- }
+  }
 };
 
-
-router.get("/",async(req, res) => {
-    const allGo = await Go.find({});
-     res.render("listings/goindex",{allGo});
+// INDEX - sirf current user ke goals dikhaye
+router.get("/", isLoggedIn, async (req, res) => {
+  const allGo = await Go.find({ owner: req.user._id });// ⭐ Important
+  res.render("listings/goindex", { allGo });
 });
-//Created save Route
-router.post("/", wrapAsync(async (req, res) => {
+
+// CREATE - owner attach
+router.post("/", isLoggedIn, wrapAsync(async (req, res) => {
   const newGo = new Go(req.body.go);
+  newGo.owner = req.user._id;        // ⭐ Important
   await newGo.save();
+   req.flash("success","New Goal has added...");
   res.redirect("/go");
-//   res.redirect("listings/gotindex");
 }));
-//mortnew---
-router.get("/new", (req, res) => {
+
+// NEW
+router.get("/new", isLoggedIn, (req, res) => {
   res.render("listings/goadd");
 });
 
-//Edit Route
-router.get("/:id/edit", async (req, res) => {
+// EDIT - sirf owner
+router.get("/:id/edit", isLoggedIn, async (req, res) => {
   let { id } = req.params;
-  const go = await Go.findById(id);
-  res.render("listings/goedit.ejs", { go });
+  const go = await Go.findOne({ _id: id, owner: req.user._id }); 
+
+  if (!go) {
+    req.flash("error", "Not allowed!");
+    return res.redirect("/go");
+  }
+
+  res.render("listings/goedit", { go });
 });
 
-//Update Route
-router.put("/:id", async (req, res) => {
+// UPDATE - owner only
+router.put("/:id", isLoggedIn, async (req, res) => {
   let { id } = req.params;
-  await Go.findByIdAndUpdate(id, { ...req.body.go});
-  res.redirect(`/go`);
-});
 
-//Delete Route
-router.delete("/:id", async (req, res) => {
-  let { id } = req.params;
-  let deletedGo = await Go.findByIdAndDelete(id);
-  console.log(deletedGo);
+  await Go.findOneAndUpdate(
+    { _id: id, owner: req.user._id },   // ⭐ owner check
+    { ...req.body.go }
+  );
+
   res.redirect("/go");
 });
 
+// DELETE - owner only
+router.delete("/:id", isLoggedIn, async (req, res) => {
+  let { id } = req.params;
+
+  await Go.findOneAndDelete({   // ⭐ owner check
+    _id: id,
+    owner: req.user._id
+  });
+
+  res.redirect("/go");
+});
 
 module.exports = router;

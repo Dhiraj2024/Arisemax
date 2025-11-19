@@ -23,13 +23,17 @@ const expoSchema = new Schema({
     url: {
       type: String,
       default:
-        "https://images.unsplash.com/photo-1625505826533-5c80aca7d157?auto=format&fit=crop&w=800&q=60",
+        "https://media.wired.com/photos/65989cb9c256c0f1447f298c/3:2/w_2560%2Cc_limit/WW2024_1423783201_SECURITY_Scott-Shapiro.jpg",
       set: (v) =>
         v === ""
-          ? "https://images.unsplash.com/photo-1625505826533-5c80aca7d157?auto=format&fit=crop&w=800&q=60"
+          ? "https://media.wired.com/photos/65989cb9c256c0f1447f298c/3:2/w_2560%2Cc_limit/WW2024_1423783201_SECURITY_Scott-Shapiro.jpg"
           : v,
     },
   },
+    owner:{
+      type:Schema.Types.ObjectId,
+      ref:"User",
+    },
 });
 
 const Expo = mongoose.model("Expo", expoSchema);

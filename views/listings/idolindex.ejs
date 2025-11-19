@@ -1,7 +1,6 @@
 <%- layout("layout/boilerplate") %>
 <div class="content">
 
-  
 <div class="content mx-auto my-4">
   <div class="idol-content">
     <h2 class="text-center mb-4">My Inspiration</h2>
@@ -17,6 +16,8 @@
             <h5 class="card-title text-center mb-2"><%= idol.title %></h5>
             <p class="card-text text-muted"><%= idol.description %></p>
           </div>
+
+            <% if (currentUser && currentUser._id.toString() === idol.owner.toString()) { %>
           <div class="d-flex justify-content-end align-items-center gap-2 mt-2">
             <a href="/idol/<%= idol._id %>/edit" class="text-secondary" title="Edit Entry">
               ✏️
@@ -29,6 +30,7 @@
               </button>
             </form>
           </div>
+             <% } %>
         </div>
       </div>
       <% } %>

@@ -6,7 +6,7 @@
       class="sidebar-logo"
     />
     <h2 class="sidebar-title" style="  letter-spacing: 1px;
-  text-shadow: 0 1px 2px rgba(0,0,0,0.3);  font-family: 'Great Vibes', 'Dancing Script', cursive;">Arise-Max</h2>
+  text-shadow: 0 1px 2px rgba(0,0,0,0.3);  font-family: 'Great Vibes', 'Dancing Script', cursive;">Self- <a style="font-family:Georgia, 'Times New Roman', Times, serif ;">Arise</a></h2>
   </div>
 
   <nav class="sidebar-links">
@@ -19,10 +19,14 @@
     <a href="/know" class="sidebar-item">Know</a>
     <a href="/arise" class="sidebar-item " style="color: rgba(0, 157, 255, 0.93);" >Arise<sup style="color: rgba(230, 211, 69, 0.741);">New</sup></a>
     <a href="/afr" class="sidebar-item">Affirmation</a>
-        <a href="/idol" class="sidebar-item " style="color:  rgba(0, 157, 255, 0.93);">Challenges</a>
-    <a href="#" class="sidebar-item">Login</a>
-    <a href="#" class="sidebar-item">Logout</a>
-  </nav>
+        <a href="/pend" class="sidebar-item">Pending</a>
+      <% if (!currentUser) { %>
+    <a href="/login" class="sidebar-item">Login</a>
+      <% } else { %>
+            <a href="/logout" class="sidebar-item ">logout</a>
+              <% } %>
+ 
+            </nav>
 
   <div class="social-icons">
     <a href="https://github.com/Dhiraj2024" class="icon-link"><i class="fa-brands fa-github"></i></a>

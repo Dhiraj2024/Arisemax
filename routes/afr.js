@@ -4,58 +4,57 @@ const wrapAsync = require("../utils/wrapAsync.js");
 const ExpressError = require("../utils/ExpressEroor.js");
 const { afrSchema } = require("../schema.js");
 const Afr = require("../models/afr.js");
+const { isLoggedIn } = require("../middleware");
 
-
-const validateListing = (req,res,next) => {
- let {error} =  afrSchema.validate(req.body);
-//  console.log(result); 
- if(error){
-    let errMsg = error.details.map((el)=> el.message).join(",");
-  throw new ExpressError(404, errMsg);
- }else{
+const validateListing = (req, res, next) => {
+  let { error } = afrSchema.validate(req.body);
+  if (error) {
+    let errMsg = error.details.map((el) => el.message).join(",");
+    throw new ExpressError(404, errMsg);
+  } else {
     next();
- }
+  }
 };
 
-//Afrindex
-router.get("/",async(req, res) => {
-    const allAfr = await Afr.find({});
-     res.render("listings/afrindex",{allAfr});
+// Afr Index Route
+router.get("/", async (req, res) => {
+  const allAfr = await Afr.find({}).populate("owner");
+  res.render("listings/afrindex", { allAfr });
 });
-//Created save Route
-router.post("/", wrapAsync(async (req, res) => {
+
+// Create Route
+router.post("/", isLoggedIn, wrapAsync(async (req, res) => {
   const newAfr = new Afr(req.body.afr);
+  newAfr.owner = req.user._id;
   await newAfr.save();
+    req.flash("success","New Couse has added...");
   res.redirect("/afr");
-//   res.redirect("listings/mortindex");
 }));
-//mortnew---
-router.get("/new", (req, res) => {
+
+// New Form
+router.get("/new", isLoggedIn, (req, res) => {
   res.render("listings/afradd");
 });
 
-//Edit Route
-router.get("/:id/edit", async (req, res) => {
+// Edit Route
+router.get("/:id/edit", isLoggedIn, async (req, res) => {
   let { id } = req.params;
-  const afr = await Afr.findById(id);
-  res.render("listings/afredit.ejs", { afr });
+  const afr = await Afr.findById(id).populate("owner");
+  res.render("listings/afredit", { afr });
 });
 
-//Update Route
-router.put("/:id", async (req, res) => {
+// Update Route
+router.put("/:id", isLoggedIn, async (req, res) => {
   let { id } = req.params;
-  await Afr.findByIdAndUpdate(id, { ...req.body.afr});
-  res.redirect(`/afr`);
-});
-
-//Delete Route
-router.delete("/:id", async (req, res) => {
-  let { id } = req.params;
-  let deletedAfr = await Afr.findByIdAndDelete(id);
-  console.log(deletedAfr);
+  await Afr.findByIdAndUpdate(id, { ...req.body.afr });
   res.redirect("/afr");
 });
 
-
+// Delete Route
+router.delete("/:id", isLoggedIn, async (req, res) => {
+  let { id } = req.params;
+  await Afr.findByIdAndDelete(id);
+  res.redirect("/afr");
+});
 
 module.exports = router;

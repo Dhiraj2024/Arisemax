@@ -1,0 +1,53 @@
+<%- layout("layout/boilerplate") %>
+
+<div class="content d-flex justify-content-center align-items-center" style="min-height:80vh;">
+  <div class="card shadow-lg border-0 rounded-4 p-4" style="width: 100%; max-width: 400px; animation: fadeIn 0.6s ease-out;">
+    <h1 class="text-center mb-4 fw-semibold text-dark">Login</h1>
+
+    <form method="POST" action="/login" novalidate class="needs-validation">
+      <div class="mb-3">
+        <label for="username" class="form-label fw-medium">Username</label>
+        <input
+          type="text"
+          class="form-control"
+          id="username"
+          name="username"
+          required
+        />
+        <div class="invalid-feedback">Please fill this field!</div>
+      </div>
+
+      <div class="mb-3">
+        <label for="password" class="form-label fw-medium">Password</label>
+        <input
+          type="password"
+          class="form-control"
+          id="password"
+          name="password"
+          required
+        />
+        <div class="invalid-feedback">Please fill this field!</div>
+      </div>
+
+      <button
+        type="submit"
+        class="btn  w-100 fw-semibold py-2 "
+        style="transition: all 0.2s ease; background-color: #f97316 !important; "
+        onmouseover="this.style.transform='scale(1.03)'"
+        onmouseout="this.style.transform='scale(1)'"  >
+        Login 
+      </button>
+    </form>
+
+    <p class="text-center mt-3 text-muted">
+      New user? <a href="/signup" class="text-danger text-decoration-none fw-semibold">Sign up</a>
+    </p>
+  </div>
+</div>
+
+<style>
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+</style>
