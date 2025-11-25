@@ -1,67 +1,38 @@
 const express = require("express");
 const router = express.Router();
-const wrapAsync = require("../utils/wrapAsync.js");
-const ExpressError = require("../utils/ExpressEroor.js");
-const { mortSchema } = require("../schema.js");
-const Mort = require("../models/mortgage.js");
+const wrapAsync = require("../utils/wrapAsync");
+const ExpressError = require("../utils/ExpressEroor");
+const { mortSchema } = require("../schema");
 const { isLoggedIn } = require("../middleware");
+const mortController = require("../controllers/mort");
 
-const validateListing = (req,res,next) => {
- let {error} =  mortSchema.validate(req.body);
-//  console.log(result); 
- if(error){
-    let errMsg = error.details.map((el)=> el.message).join(",");
-  throw new ExpressError(404, errMsg);
- }else{
+// Validation
+const validateListing = (req, res, next) => {
+  let { error } = mortSchema.validate(req.body);
+  if (error) {
+    let msg = error.details.map((el) => el.message).join(",");
+    throw new ExpressError(404, msg);
+  } else {
     next();
- }
+  }
 };
 
+// INDEX
+router.get("/", isLoggedIn, wrapAsync(mortController.index));
 
-//Mortindex
-router.get("/", isLoggedIn,async(req, res) => {
-    const allMort = await Mort.find({ owner: req.user._id });
-     res.render("listings/mortindex",{ allMort });
-});
-//Created save Route
-router.post("/", wrapAsync(async (req, res) => {
-  const newMort = new Mort(req.body.mort);
-    newMort.owner = req.user._id;        // ⭐ Important
-  await newMort.save();
-  req.flash("success","New Pain is created...");
-  res.redirect("/mort");
-//   res.redirect("listings/mortindex");
-}));
-//mortnew---
-router.get("/new",isLoggedIn, (req, res) => {
-  res.render("listings/mortadd");
-});
+// NEW FORM
+router.get("/new", isLoggedIn, mortController.renderNewForm);
 
-//Edit Route
-router.get("/:id/edit", isLoggedIn, async (req, res) => {
-  const { id } = req.params;
-  const mort = await Mort.findOne({ _id: id, owner: req.user._id });// check
-  if (!mort) return res.redirect("/mort");
-  res.render("listings/mortedit", { mort });
-});
+// CREATE
+router.post("/", isLoggedIn, validateListing, wrapAsync(mortController.createMort));
 
-//Update Route
-router.put("/:id", async (req, res) => {
-  let { id } = req.params;
+// EDIT FORM
+router.get("/:id/edit", isLoggedIn, wrapAsync(mortController.renderEditForm));
 
-    await Mort.findOneAndUpdate(
-      { _id: id, owner: req.user._id },   // ⭐ owner check
-      { ...req.body.Mort }
-    );
+// UPDATE
+router.put("/:id", isLoggedIn, validateListing, wrapAsync(mortController.updateMort));
 
-  res.redirect(`/mort`);
-});
-
-//Delete Route
-router.delete("/:id", isLoggedIn,async (req, res) => {
-  let { id } = req.params;
-    await Mort.findOneAndDelete({_id: id, owner: req.user._id});
-  res.redirect("/mort");
-});
+// DELETE
+router.delete("/:id", isLoggedIn, wrapAsync(mortController.deleteMort));
 
 module.exports = router;

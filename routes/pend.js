@@ -1,57 +1,32 @@
 const express = require("express");
 const router = express.Router();
-const wrapAsync = require("../utils/wrapAsync.js");
-const ExpressError = require("../utils/ExpressEroor.js");
-const { pendSchema } = require("../schema.js");
-const Pend = require("../models/pend.js");
+const wrapAsync = require("../utils/wrapAsync");
+const ExpressError = require("../utils/ExpressEroor");
+const { pendSchema } = require("../schema");
 const { isLoggedIn } = require("../middleware");
+const pendController = require("../controllers/pend");
 
-// Validate
+// Validation
 const validateListing = (req, res, next) => {
   let { error } = pendSchema.validate(req.body);
   if (error) {
-    let errMsg = error.details.map((el) => el.message).join(",");
-    throw new ExpressError(404, errMsg);
+    let msg = error.details.map((el) => el.message).join(",");
+    throw new ExpressError(404, msg);
   } else {
     next();
   }
 };
 
-// INDEX (ONLY LOGGED USER DATA)
-router.get("/", isLoggedIn, async (req, res) => {
-  const allPend = await Pend.find({ owner: req.user._id });
-  res.render("listings/pendindex", { allPend });
-});
-
-// CREATE
-router.post(
-  "/",
-  isLoggedIn,
-  wrapAsync(async (req, res) => {
-    const newPend = new Pend(req.body.pend);
-    newPend.owner = req.user._id;
-
-    await newPend.save();
-    req.flash("success", "New task added...");
-    res.redirect("/pend");
-  })
-);
+// INDEX
+router.get("/", isLoggedIn, wrapAsync(pendController.index));
 
 // NEW FORM
-router.get("/new", isLoggedIn, (req, res) => {
-  res.render("listings/pendadd");
-});
+router.get("/new", isLoggedIn, pendController.renderNewForm);
+
+// CREATE
+router.post("/", isLoggedIn, validateListing, wrapAsync(pendController.createPend));
 
 // DELETE
-router.delete("/:id", isLoggedIn, async (req, res) => {
-  let { id } = req.params;
-
-  await Pend.findOneAndDelete({
-    _id: id,
-    owner: req.user._id,
-  });
-
-  res.redirect("/pend");
-});
+router.delete("/:id", isLoggedIn, wrapAsync(pendController.deletePend));
 
 module.exports = router;

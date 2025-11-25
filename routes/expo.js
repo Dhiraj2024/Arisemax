@@ -3,60 +3,48 @@ const router = express.Router();
 const wrapAsync = require("../utils/wrapAsync.js");
 const ExpressError = require("../utils/ExpressEroor.js");
 const { expoSchema } = require("../schema.js");
-const Expo = require("../models/expo.js");
 const { isLoggedIn } = require("../middleware");
+const expoController = require("../controllers/expo");
 
-const validateListing = (req,res,next) => {
- let {error} =  expoSchema.validate(req.body);
-//  console.log(result); 
- if(error){
-    let errMsg = error.details.map((el)=> el.message).join(",");
-  throw new ExpressError(404, errMsg);
- }else{
-    next();
- }
+// JOI Validation
+const validateListing = (req, res, next) => {
+  let { error } = expoSchema.validate(req.body);
+  if (error) {
+    let errMsg = error.details.map((el) => el.message).join(",");
+    throw new ExpressError(404, errMsg);
+  }
+  next();
 };
 
+// INDEX + CREATE
+router
+  .route("/")
+  .get(wrapAsync(expoController.index))
+  .post(
+    isLoggedIn,
+    validateListing,
+    wrapAsync(expoController.createExpo)
+  );
 
-router.get("/",async(req, res) => {
-    const allExpo = await Expo.find({}).populate("owner");
-     res.render("listings/expoindex",{allExpo});
-});
-//Created save Route
-router.post("/", wrapAsync(async (req, res) => {
-  const newExpo = new Expo(req.body.expo);
-   newExpo.owner = req.user._id;
-  await newExpo.save();
-  req.flash("success","New Journey has Started...");
-  res.redirect("/expo");
-//   res.redirect("listings/gotindex");
-}));
-//mortnew---
-router.get("/new", isLoggedIn,(req, res) => {
-  res.render("listings/expoadd");
-});
+// NEW FORM
+router.get("/new", isLoggedIn, expoController.renderNewForm);
 
-//Edit Route
-router.get("/:id/edit",isLoggedIn, async (req, res) => {
-  let { id } = req.params;
-  const expo = await Expo.findById(id).populate("owner");
-  res.render("listings/expoedit.ejs", { expo });
-});
+// EDIT FORM
+router.get("/:id/edit", isLoggedIn, wrapAsync(expoController.renderEditForm));
 
-//Update Route
-router.put("/:id",isLoggedIn, async (req, res) => {
-  let { id } = req.params;
-  await Expo.findByIdAndUpdate(id, { ...req.body.expo});
-  res.redirect(`/expo`);
-});
+// UPDATE ROUTE
+router.put(
+  "/:id",
+  isLoggedIn,
+  validateListing,
+  wrapAsync(expoController.updateExpo)
+);
 
-//Delete Route
-router.delete("/:id",isLoggedIn, async (req, res) => {
-  let { id } = req.params;
-  let deletedExpo = await Expo.findByIdAndDelete(id);
-  // console.log(deletedExpo);
-  res.redirect("/expo");
-});
-
+// DELETE ROUTE
+router.delete(
+  "/:id",
+  isLoggedIn,
+  wrapAsync(expoController.deleteExpo)
+);
 
 module.exports = router;

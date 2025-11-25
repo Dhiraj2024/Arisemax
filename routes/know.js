@@ -1,12 +1,12 @@
 const express = require("express");
 const router = express.Router();
-const wrapAsync = require("../utils/wrapAsync.js");
-const ExpressError = require("../utils/ExpressEroor.js");
-const { knowSchema } = require("../schema.js");
-const Know = require("../models/know.js");
+const wrapAsync = require("../utils/wrapAsync");
+const ExpressError = require("../utils/ExpressEroor");
+const { knowSchema } = require("../schema");
 const { isLoggedIn } = require("../middleware");
+const knowController = require("../controllers/know");
 
-// ------------------ Validation ------------------
+// Validation
 const validateListing = (req, res, next) => {
   let { error } = knowSchema.validate(req.body);
   if (error) {
@@ -17,69 +17,22 @@ const validateListing = (req, res, next) => {
   }
 };
 
-// ------------------ INDEX (ONLY LOGGED USER DATA) ------------------
-router.get("/", isLoggedIn, async (req, res) => {
-  const allKnow = await Know.find({ owner: req.user._id }); // ⭐ important
-  res.render("listings/knowindex", { allKnow });
-});
+// INDEX
+router.get("/", isLoggedIn, wrapAsync(knowController.index));
 
-// ------------------ CREATE ------------------
-router.post(
-  "/",
-  isLoggedIn,
-  wrapAsync(async (req, res) => {
-    const newKnow = new Know(req.body.know);
-    newKnow.owner = req.user._id; // ⭐ owner add
+// NEW
+router.get("/new", isLoggedIn, knowController.renderNewForm);
 
-    await newKnow.save();
-    res.redirect("/know");
-  })
-);
+// CREATE
+router.post("/", isLoggedIn, validateListing, wrapAsync(knowController.createKnow));
 
-// ------------------ NEW FORM ------------------
-router.get("/new", isLoggedIn, (req, res) => {
-  res.render("listings/knowadd");
-});
+// EDIT FORM
+router.get("/:id/edit", isLoggedIn, wrapAsync(knowController.renderEditForm));
 
-// ------------------ EDIT ------------------
-router.get("/:id/edit", isLoggedIn, async (req, res) => {
-  const { id } = req.params;
+// UPDATE
+router.put("/:id", isLoggedIn, validateListing, wrapAsync(knowController.updateKnow));
 
-  const know = await Know.findOne({
-    _id: id,
-    owner: req.user._id, // ⭐ owner check
-  });
-
-  if (!know) {
-    req.flash("error", "Not allowed!");
-    return res.redirect("/know");
-  }
-
-  res.render("listings/knowedit", { know });
-});
-
-// ------------------ UPDATE ------------------
-router.put("/:id", isLoggedIn, async (req, res) => {
-  const { id } = req.params;
-
-  await Know.findOneAndUpdate(
-    { _id: id, owner: req.user._id }, // ⭐ owner check
-    { ...req.body.know }
-  );
-
-  res.redirect("/know");
-});
-
-// ------------------ DELETE ------------------
-router.delete("/:id", isLoggedIn, async (req, res) => {
-  const { id } = req.params;
-
-  await Know.findOneAndDelete({
-    _id: id,
-    owner: req.user._id, // ⭐ owner check
-  });
-
-  res.redirect("/know");
-});
+// DELETE
+router.delete("/:id", isLoggedIn, wrapAsync(knowController.deleteKnow));
 
 module.exports = router;
