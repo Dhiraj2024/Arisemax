@@ -14,7 +14,7 @@
   }
   .mort-list-card {
     border: none;
-    border-left: 4px solid #ffc107;
+    border-left: 4px solid #4e585bc8;
     transition: all 0.3s ease;
   }
   .mort-list-card:hover {
@@ -30,11 +30,53 @@
     color: gray;
     opacity: 0.7;
   }
-  .btn-done {
+  /* .btn-done {
+    color: #f8f9fa;
     font-size: 0.9rem;
     padding: 0.3rem 0.8rem;
     border-radius: 20px;
-  }
+    background-color:rgba(0, 0, 0, 0.764);
+  } */
+   
+  .btn-done {
+    color: #f8f9fa;
+  padding: 12px 28px;
+ border-radius: 20px 0px;
+  transition: 0.2s;
+  background-color: #101d2acf;
+}
+
+/* fire border effect */
+.btn-done::before {
+  content: "";
+  position: absolute;
+  top: -6px;
+  left: -6px;
+  right: -6px;
+  bottom: -6px;
+  border-radius: 35px;
+  background: conic-gradient(
+    from 0deg,
+    #0077ff82,
+    #0077ff73,
+    #ff99008c,
+    #ffc1079d,
+    #6200ff79,
+    #ff6a00,
+    #cc00ff93
+  );
+  filter: blur(8px);
+  opacity: 0;
+  z-index: -1;
+  transition: 0.25s ease-in-out;
+}
+
+/* show fire on hover */
+.btn-done:hover::before {
+  opacity: 1;
+  transform: scale(1.05);
+}
+
 </style>
 
 <div class="content">
@@ -45,7 +87,7 @@
       <div class="mort-list-card card mb-3">
         <div class="card-body d-flex justify-content-between align-items-center">
           <h5 class="card-title mb-0"><%= arise.title %></h5>
-          <button class="btn btn-warning btn-done">Done</button>
+          <button class="btn-done">Done</button>
         </div>
       </div>
     <% } %>

@@ -7,6 +7,15 @@ const userSchema = new Schema({
         type:String,
       required: true,
     },
+    isAdmin: {
+  type: Boolean,
+  default: false
+},
+loginCount: {
+  type: Number,
+  default: 0
+},
+
 });
 //FOR USERNAME , PASSWORRD + HASHING + SALTING
 userSchema.plugin(passportLocalMongoose);

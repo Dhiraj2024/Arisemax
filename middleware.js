@@ -32,3 +32,13 @@ module.exports.validateMort = (req,res,next) => {
 };
  
 
+
+
+module.exports.isAdmin = (req, res, next) => {
+  if (!req.isAuthenticated() || !req.user.isAdmin) {
+    req.flash("error", "Admin access only!");
+    return res.redirect("/");
+  }
+  next();
+};
+

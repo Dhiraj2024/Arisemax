@@ -1,12 +1,12 @@
 <div class="sidebar">
   <div class="sidebar-header">
     <img
-      src="https://i.pinimg.com/736x/1a/f7/05/1af705a86f30ae3c00fa9fa36abdf4b7.jpg"
+      src="https://freepngimg.com/thumb/anime/26533-9-uchiha-sasuke-transparent-picture-thumb.png"
       alt="logo"
       class="sidebar-logo"
     />
     <h2 class="sidebar-title" style="  letter-spacing: 1px;
-  text-shadow: 0 1px 2px rgba(0,0,0,0.3);  font-family: 'Great Vibes', 'Dancing Script', cursive;">Self- <a style="font-family:Georgia, 'Times New Roman', Times, serif ;">Arise</a></h2>
+  text-shadow: 0 1px 2px rgba(0,0,0,0.3);  font-family: 'Great Vibes', 'Dancing Script', cursive;">Self-<a style="font-family:Georgia, 'Times New Roman', Times, serif ;">Arise</a></h2>
   </div>
 
   <nav class="sidebar-links">
@@ -20,13 +20,24 @@
     <a href="/arise" class="sidebar-item " style="color: rgba(0, 157, 255, 0.93);" >Arise<sup style="color: rgba(230, 211, 69, 0.741);">New</sup></a>
     <a href="/afr" class="sidebar-item">Affirmation</a>
         <a href="/pend" class="sidebar-item">Pending</a>
-      <% if (!currentUser) { %>
-    <a href="/login" class="sidebar-item">Login</a>
-      <% } else { %>
-            <a href="/logout" class="sidebar-item ">logout</a>
-              <% } %>
- 
-            </nav>
+    
+
+
+
+        
+<!-- Admin Dashboard show only if user is admin -->
+<% if (currentUser && currentUser.isAdmin) { %>
+  <a href="/admin/dashboard" class="sidebar-item">Admin Dashboard</a>
+<% } %>
+
+<!-- Login / Logout -->
+<% if (!currentUser) { %>
+  <a href="/login" class="sidebar-item">Login</a>
+<% } else { %>
+  <a href="/logout" class="sidebar-item">Logout</a>
+<% } %>
+
+</nav>
 
   <div class="social-icons">
     <a href="https://github.com/Dhiraj2024" class="icon-link"><i class="fa-brands fa-github"></i></a>

@@ -1,0 +1,148 @@
+if(process.env.NODE_ENV != "production"){
+require("dotenv").config();
+}
+console.log(process.env.SECRET);
+const express = require("express");
+const app = express();
+const mongoose = require('mongoose');
+const Arise = require("./models/arise.js");
+const path = require("path");
+const methodOverride = require("method-override");
+const ejsMate = require("ejs-mate");
+const ExpressError = require("./utils/ExpressEroor.js");
+const wrapAsync = require("./utils/wrapAsync.js");//
+const multer = require('multer');
+const {storage } = require("./cloudConfig.js");
+const upload = multer({storage});
+const User = require("./models/user"); // ✅ import your User model
+const mort = require("./routes/mort");
+const afr = require("./routes/afr");
+const pend = require("./routes/pend");
+const daily = require("./routes/daily");
+const go = require("./routes/go");
+const expo = require("./routes/expo");
+const know = require("./routes/know");
+const idol = require("./routes/idol");
+const userRouter = require("./routes/user");
+const adminRoutes = require("./routes/admin");
+const passport = require("passport");
+const LocalStrategy =require("passport-local");
+const session = require("express-session");
+const cookieParser = require("cookie-parser");
+const flash = require("connect-flash");
+
+const MONGO_URL="mongodb://127.0.0.1:27017/Arisemax";   
+
+app.use(express.static(path.join(__dirname, "public")));//for css
+app.set("view engine", "ejs");  // ⚡ "view-engine" nahi, "view engine"
+app.set("views", path.join(__dirname, "views"));  // ✅ sahi function join()
+ app.use(express.urlencoded({ extended: true }));
+app.use(methodOverride("_method"));
+app.engine('ejs',ejsMate);
+app.use(adminRoutes);
+
+const sessionOptions = {
+    secret: "MySupersecretcode" ,
+    resave: false ,
+    saveUninitialized: true,
+    cookie: {
+        expires: Date.now() + 7 * 24 * 60 * 1000,
+        maxAge: 7*24*60*60*1000 , 
+        httpOnly: true,
+    },
+};
+
+// ✅ Use middlewares (in correct order)
+app.use(session(sessionOptions));
+app.use(flash());
+app.use(cookieParser("secretcode"));
+app.use(passport.initialize());
+app.use(passport.session());
+
+// ✅ Passport setup
+passport.use(new LocalStrategy(User.authenticate()));
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
+//midleware for flash--------
+// Flash + Current User globally available karne ke liye
+app.use((req, res, next) => {
+    res.locals.currentUser = req.user;
+    res.locals.successMsg = req.flash("success");   // SAME NAME
+    res.locals.errorMsg = req.flash("error");       // SAME NAME
+    next();
+});
+main()
+.then(() => {
+console.log("connection successfull");
+})
+.catch(err => {
+    console.log(err);
+});
+async function main() {
+ await  mongoose.connect(MONGO_URL);   
+}
+app.use((req, res, next) => {
+  res.locals.currentUser = req.user;
+  next();
+});
+
+/////////////VALIDATION//////////////
+const validateListing = (req,res,next) => {
+ let {error} =  listingSchema.validate(req.body);
+//  console.log(result); 
+ if(error){
+    let errMsg = error.details.map((el)=> el.message).join(",");
+  throw new ExpressError(404, errMsg);
+ }else{
+    next();
+ }
+};
+//----Home------
+app.get("/", (req, res) => {
+     res.render("listings/home.ejs");
+});
+////////////////////MORTGADGE ????????????????????
+app.use("/mort", mort);
+////////////////////AFFERMATION////////////////////////
+app.use("/afr", afr);
+////////////////////PENDINGS////////////////////////
+app.use("/pend", pend);
+////////////////////Daily Aims////////////////////////
+app.use("/daily", daily);
+////////////////////Goal////////////////////////
+//////////////////////////////////////////////////
+app.use("/go", go);
+////////////////////Know////////////////////////
+app.use("/know", know);
+///////////////////IDOLS////////////////////////
+app.use("/idol", idol);
+///////////////////EXPLOREEE////////////////////////
+app.use("/expo", expo);
+/////////LOGIN?SIGNUP???????????????????????
+//////////////////////////////////////////////
+app.use("/",userRouter);
+//////////////////  ARISE  ////////////////////////
+app.get("/arise",async(req, res) => {
+    const allArise = await Arise.find({});
+     res.render("listings/ariseindex",{allArise});
+});
+//////////////////  ADMIN  ////////////////////////
+//////////////////////////////////////////////////
+app.use("/", adminRoutes);
+
+app.use((req, res, next) => {  //hum apna custom error de sake 
+  next(new ExpressError(404, "Page not found"));
+});
+
+app.use((err, req, res, next) => {
+  const { statusCode = 500, message = "Something went wrong" } = err;
+  if (res.headersSent) {   //isliye likja taki bahar se koi  operation perform kara de 
+    return next(err);
+  }
+  res.status(statusCode).render("error.ejs", { err, message });
+});
+
+app.listen(8090, () => {
+    console.log(`app is listening on port 8090`);
+});

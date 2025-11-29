@@ -45,3 +45,14 @@ module.exports.logout = (req, res, next) => {
     res.redirect("/");
   });
 };
+
+module.exports.login = async (req, res) => {
+  // Increase login count
+  req.user.loginCount = (req.user.loginCount || 0) + 1;
+  await req.user.save();
+
+  req.flash("success", "Welcome back!");
+  const redirectUrl = res.locals.redirectUrl || "/";
+  res.redirect(redirectUrl);
+};
+
