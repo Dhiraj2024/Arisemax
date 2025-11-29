@@ -2,7 +2,7 @@
 if (process.env.NODE_ENV !== "production") {
     require("dotenv").config();
 }
-console.log("SESSION_SECRE:", process.env.SECRET);
+console.log("SESSION_SECRET:", process.env.SECRET);
 
 
 const MongoStore = require("connect-mongo");
@@ -20,7 +20,7 @@ const session = require("express-session");
 const cookieParser = require("cookie-parser");
 const flash = require("connect-flash");
 const multer = require('multer');
-const { cloudinary ,storage } = require("./cloudConfig.js");
+const {storage } = require("./cloudConfig.js");
 const upload = multer({ storage });
 
 const User = require("./models/user");
