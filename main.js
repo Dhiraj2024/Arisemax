@@ -2,7 +2,7 @@
 if (process.env.NODE_ENV !== "production") {
     require("dotenv").config();
 }
-console.log("SESSION_SECRET:", process.env.SECRET);
+mongoose.connect(process.env.MONGODB_URI);
 
 
 const MongoStore = require("connect-mongo");
@@ -63,7 +63,7 @@ const store = MongoStore.create({
 
 const sessionOptions = {
     store,
-    secret: process.env.SESSION_SECRET,
+    secret: process.env.SESSION_SECRET || 'MySuperSecretcode',
     resave: false,
     saveUninitialized: false,
     cookie: {
@@ -72,7 +72,7 @@ const sessionOptions = {
     }
 };
 app.use(session(sessionOptions));
-app.use(cookieParser("secretcode"));
+app.use(cookieParser(process.env.SESSION_SECRET || 'MySuperSecretcode'));
 app.use(flash());
 
 // ========================= PASSPORT CONFIG =========================
@@ -165,6 +165,7 @@ app.use((err, req, res, next) => {
 });
 
 // ========================= SERVER =========================
-app.listen(8090, () => {
-    console.log(`Server is running on port 8090`);
+const port = process.env.PORT || 8090;
+app.listen(port, () => {
+    console.log("Server running on port", port);
 });
