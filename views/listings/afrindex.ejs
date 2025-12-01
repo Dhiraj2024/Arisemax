@@ -51,3 +51,33 @@
 
   </div>
 </div>
+
+
+<div class="video-container">
+    <video autoplay loop muted playsinline class="bg-video">
+        <source src="/video/1202.mp4" type="video/mp4" />
+    </video>
+</div>
+
+
+<!-- 🎵 BACKGROUND MUSIC -->
+<audio id="bgMusic" loop>
+   <source src="/audio/1202.MP3" type="audio/mp3">
+</audio>
+<div id="musicControl" 
+     style="position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background: #443a5580;
+            padding: 10px 12px;
+            border-radius: 50%;
+            cursor: pointer;
+            width: 50px;
+            height: 50px;
+            display:flex;
+            align-items:center;
+            justify-content:center;">
+    🔊
+</div>
+
+<script src="/js/vidmusic.js"></script>

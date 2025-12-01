@@ -42,6 +42,10 @@
 .mood-neutral { background: #2138bb; }
 .mood-sad { background: #3688f4; }
 
+
+
+
+
 </style>
 
 <div class="content">
@@ -93,6 +97,36 @@
 
 
 
+<div class="video-container">
+    <video autoplay loop muted playsinline class="bg-video">
+        <source src="/video/1201.mp4" type="video/mp4" />
+    </video>
+</div>
+<!-- Music Player Floating -->
+
+
+<!-- 🎵 BACKGROUND MUSIC -->
+<audio id="bgMusic" loop>
+   <source src="/audio/1201.MP3" type="audio/mp3">
+</audio>
+<div id="musicControl" 
+     style="position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background: #443a5580;
+            padding: 10px 12px;
+            border-radius: 50%;
+            cursor: pointer;
+            width: 50px;
+            height: 50px;
+            display:flex;
+            align-items:center;
+            justify-content:center;">
+    🔊
+</div>
+
+
+
 <!-- Music Player Floating -->
 <div id="musicPlayer" class="music-player">
   <span id="musicStatus">Playing...</span>
@@ -104,3 +138,5 @@
 </audio>
    </div>
    
+
+<script src="/js/vidmusic.js"></script>
