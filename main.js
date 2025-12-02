@@ -18,6 +18,7 @@ const session = require("express-session");
 const cookieParser = require("cookie-parser");
 const flash = require("connect-flash");
 const multer = require('multer');
+
 const {storage } = require("./cloudConfig.js");
 const upload = multer({ storage });
 
@@ -42,8 +43,8 @@ const wrapAsync = require("./utils/wrapAsync.js");
 
 // MongoDB connection string
 //const MONGO_URL = "mongodb://127.0.0.1:27017/Arisemax";
-const MONGO_URL = process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/Arisemax";
-console.log("Using Mongo URL:", MONGO_URL);
+const MONGO_URI = process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/Arisemax";
+console.log("Using Mongo URL:", MONGO_URI);
 // ========================= APP CONFIG =========================
 app.engine('ejs', ejsMate);
 app.set("view engine", "ejs");
@@ -53,23 +54,35 @@ app.use(methodOverride("_method"));
 app.use(express.static(path.join(__dirname, "public"))); // for CSS/JS/images
 
 // ========================= SESSION CONFIG =========================
-const store = MongoStore.create({
-    mongoUrl: MONGO_URL,
-    crypto: { secret: process.env.SESSION_SECRET },
-    touchAfter: 24 * 3600
-});
+// const store = MongoStore.create({
+//     mongoUrl: MONGO_URL,
+//     crypto: { secret: process.env.SESSION_SECRET },
+//     touchAfter: 24 * 3600
+// });
 
-const sessionOptions = {
-    store,
-    secret: process.env.SESSION_SECRET || 'MySuperSecretcode',
-    resave: false,
-    saveUninitialized: false,
-    cookie: {
-        maxAge: 7 * 24 * 60 * 60 * 1000,
-        httpOnly: true
-    }
-};
-app.use(session(sessionOptions));
+// const sessionOptions = {
+//     store,
+//     secret: process.env.SESSION_SECRET || 'MySuperSecretcode',
+//     resave: false,
+//     saveUninitialized: false,
+//     cookie: {
+//         maxAge: 7 * 24 * 60 * 60 * 1000,
+//         httpOnly: true
+//     }
+// };
+// app.use(session(sessionOptions));
+
+app.use(session({
+  secret: process.env.SESSION_SECRET || 'MySuperSecretcode',
+  resave: false,
+  saveUninitialized: false,
+  store: MongoStore.create({ 
+    mongoUrl: process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/Arisemax",
+  }),
+  cookie: {
+    maxAge: 1000 * 60 * 60 * 24 * 7
+  }
+}));
 app.use(cookieParser(process.env.SESSION_SECRET || 'MySuperSecretcode'));
 app.use(flash());
 
@@ -94,7 +107,7 @@ main()
     .catch(err => console.log(err));
 
 async function main() {
-    await mongoose.connect(MONGO_URL);
+    await mongoose.connect(MONGO_URI);
 }
 
 // ========================= VALIDATION MIDDLEWARE =========================
