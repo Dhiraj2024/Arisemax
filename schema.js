@@ -68,7 +68,6 @@ const mortSchema = Joi.object({
   }).required(),
 });
 
-
 //6 mortgage
 const userSchema = Joi.object({
   user: Joi.object({
@@ -78,4 +77,23 @@ const userSchema = Joi.object({
     },
 })
 });
-module.exports = { afrSchema, dailySchema, expoSchema, goSchema ,idolSchema ,mortSchema,userSchema};
+
+// 2️⃣ Know Schema
+const knowSchema = Joi.object({
+  know: Joi.object({
+    title: Joi.string().required(),
+    description: Joi.string().allow("", null),
+    image: Joi.object({
+      filename: Joi.string().allow("", null),
+      url: Joi.string().uri().allow("", null),
+    }).optional(),
+  }).required(),
+});
+
+// 1️⃣ pend Schema
+const pendSchema = Joi.object({
+  pend: Joi.object({
+    title: Joi.string().required(),
+  }).required(),
+});
+module.exports = { afrSchema, dailySchema, expoSchema, goSchema ,idolSchema ,mortSchema,userSchema ,knowSchema,pendSchema};

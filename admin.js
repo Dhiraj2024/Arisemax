@@ -1,7 +1,12 @@
+require("dotenv").config();   
+
 const mongoose = require("mongoose");
 const User = require("./models/user");
 
-mongoose.connect("mongodb://127.0.0.1:27017/Arisemax")
+
+const MONGO_URI = process.env.MONGODB_URI; 
+
+mongoose.connect(MONGO_URI)
   .then(() => console.log("DB Connected"))
   .catch(err => console.log(err));
 

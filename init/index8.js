@@ -1,8 +1,9 @@
 const mongoose = require("mongoose");
 const initData = require("./arise.js");
 const Arise = require("../models/arise.js");
+require("dotenv").config();
 
-const MONGO_URL = "mongodb://127.0.0.1:27017/Arisemax";
+const MONGO_URI = process.env.MONGODB_URI; 
 main()
   .then(() => {
     console.log("connected to DB");
@@ -11,7 +12,7 @@ main()
     console.log(err);
   });
 async function main() {
-  await mongoose.connect(MONGO_URL);
+  await mongoose.connect(MONGO_URI);
 }
 const initDB = async () => {
   await Arise.deleteMany({});

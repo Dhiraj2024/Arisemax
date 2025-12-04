@@ -3,7 +3,7 @@ const initData = require("./data.js");
 const Go = require("../models/go.js");
 const { Types } = mongoose;   // <-- IMPORTANT
 
-const MONGO_URL = "mongodb://127.0.0.1:27017/Arisemax";
+const MONGO_UR = "mongodb://127.0.0.1:27017/Arisemax";
 
 main()
   .then(() => {
@@ -13,7 +13,7 @@ main()
     console.log(err);
   });
 async function main() {
-  await mongoose.connect(MONGO_URL);
+  await mongoose.connect(MONGO_URI);
 }
 
 const initDB = async () => {
