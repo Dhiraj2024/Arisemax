@@ -461,11 +461,11 @@ label.form-label {
   .edit-goal-content,
   .create-goal-content {
     width: 95%;
-    padding: 20px;
+    padding: 1px;
   }
 
   .form-card {
-    padding: 25px 20px;
+    padding:0.5rem;
   }
 
   .form-control {
@@ -703,3 +703,49 @@ label.form-label {
   50% { transform: scale(1.12); }
   100% { transform: scale(1); }
 } 
+/* ADMIN--------------------------------------------*/
+.admin-container {
+  padding: 25px;
+}
+.admin-title {
+  font-size: 26px;
+  font-weight: 700;
+  margin-bottom: 20px;
+  color: #2d2f31;
+}
+.admin-card {
+  background: #fff;
+  padding: 20px;
+  border-radius: 14px;
+  box-shadow: 0px 5px 20px rgba(0,0,0,0.08);
+  border: 1px solid #ececec;
+  margin-bottom: 25px;
+}
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+  font-size: 15px;
+}
+.admin-table th {
+  background: #003cff;
+  color: #fff;
+  text-align: left;
+  padding: 12px;
+  font-weight: 600;
+}
+.admin-table td {
+  padding: 12px;
+  border-bottom: 1px solid #eee;
+}
+.admin-table tr:hover {
+  background: #f7faff;
+  transition: 0.2s ease-in-out;
+}
+.badge-admin {
+  background: #00c853;
+  color: white;
+  padding: 4px 10px;
+  font-size: 12px;
+  border-radius: 50px;
+}
